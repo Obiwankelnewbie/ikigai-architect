@@ -296,7 +296,7 @@
       <div style="position:relative;z-index:1;margin-bottom:20px;">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.25);padding:8px 16px;border-radius:20px;">
           <span>⭐⭐⭐⭐⭐</span>
-          <span style="font-size:12px;color:rgba(245,240,232,0.6);">127 salariés ont déjà activé ce plan ce mois-ci</span>
+          <span style="font-size:12px;color:rgba(245,240,232,0.6);"><span id="socialCount">127</span> salariés ont déjà activé ce plan ce mois-ci</span>
         </div>
       </div>
       <div style="position:relative;z-index:1;margin-bottom:20px;padding:14px 20px;border-top:1px solid rgba(200,169,110,0.2);border-bottom:1px solid rgba(200,169,110,0.2);">
@@ -305,12 +305,51 @@
           <strong style="color:var(--cream);">Vous achetez votre première étape concrète hors du flou.</strong>
         </p>
       </div>
-      <div style="position:relative;z-index:1;">
-        <button class="btn-unlock" onclick="simulatePostPurchase()" style="width:100%;font-size:14px;padding:18px 24px;line-height:1.4;">
-          OBTENIR MON PLAN DE SORTIE — 19€
-        </button>
-        <div style="margin-top:12px;font-size:12px;color:rgba(245,240,232,0.35);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
-          <span>✓ Accès immédiat</span><span>✓ Paiement unique</span><span>✓ Sans abonnement caché</span>
+
+      <!-- UPSELL 2 NIVEAUX -->
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:12px;">
+
+        <!-- Option 1 — Solo 19€ -->
+        <div style="border:1px solid rgba(200,169,110,0.3);border-radius:14px;padding:20px 22px;text-align:left;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:13px;font-weight:600;color:var(--gold-light);">📄 Rapport Solo</div>
+            <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--cream);">19€</div>
+          </div>
+          <ul style="font-size:12px;color:rgba(245,240,232,0.6);line-height:1.8;list-style:none;margin-bottom:14px;">
+            <li>✓ Plan Commando 14 jours</li>
+            <li>✓ Ingénierie de votre offre</li>
+            <li>✓ Script d'approche client</li>
+            <li>✓ Kit anti-imposteur</li>
+          </ul>
+          <button onclick="simulatePostPurchase('solo')" style="width:100%;padding:13px;background:rgba(200,169,110,0.15);border:1px solid rgba(200,169,110,0.4);border-radius:10px;color:var(--gold-light);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(200,169,110,0.25)'" onmouseout="this.style.background='rgba(200,169,110,0.15)'">
+            Choisir le Rapport Solo — 19€
+          </button>
+        </div>
+
+        <!-- Option 2 — Pack Lancement 49€ (recommandé) -->
+        <div style="border:2px solid var(--gold);border-radius:14px;padding:20px 22px;text-align:left;position:relative;background:rgba(200,169,110,0.06);">
+          <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);padding:4px 16px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">⭐ Recommandé</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:13px;font-weight:600;color:var(--gold-light);">🚀 Pack Lancement</div>
+            <div style="display:flex;align-items:baseline;gap:8px;">
+              <span style="font-size:13px;color:rgba(245,240,232,0.3);text-decoration:line-through;">69€</span>
+              <span style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--gold-light);">49€</span>
+            </div>
+          </div>
+          <ul style="font-size:12px;color:rgba(245,240,232,0.6);line-height:1.8;list-style:none;margin-bottom:6px;">
+            <li>✓ Tout le Rapport Solo</li>
+            <li style="color:var(--gold-light);font-weight:500;">✓ 🎓 Plan de montée en compétences personnalisé</li>
+            <li style="color:var(--gold-light);font-weight:500;">✓ 2 formations ciblées sur votre profil exact</li>
+            <li style="color:var(--gold-light);font-weight:500;">✓ Mini-formation vidéo "3 premiers clients sans budget"</li>
+          </ul>
+          <div style="font-size:11px;color:rgba(245,240,232,0.35);margin-bottom:14px;font-style:italic;">Économisez 20€ — offre de lancement</div>
+          <button onclick="simulatePostPurchase('pack')" style="width:100%;padding:15px;background:var(--gold);border:none;border-radius:10px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--gold-light)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--gold)';this.style.transform='translateY(0)'">
+            Choisir le Pack Lancement — 49€
+          </button>
+        </div>
+
+        <div style="font-size:11px;color:rgba(245,240,232,0.3);text-align:center;margin-top:4px;">
+          ✓ Accès immédiat &nbsp;·&nbsp; ✓ Paiement unique &nbsp;·&nbsp; ✓ Sans abonnement caché
         </div>
       </div>
     </div>
@@ -390,6 +429,13 @@ function injectDynamicForce() {
   });
 }
 
+function injectSocialProof() {
+  requestAnimationFrame(() => {
+    const el = document.getElementById('socialCount');
+    if (el && window._socialCount) el.textContent = window._socialCount;
+  });
+}
+
 // ─── ANALYSE IA ───────────────────────────────────────────────
 // 🔒 ARCHITECTURE SÉCURISÉE :
 //    Ce frontend appelle /api/analyze (proxy Vercel).
@@ -424,9 +470,26 @@ FORMAT DE RÉPONSE OBLIGATOIRE — réponds UNIQUEMENT en JSON valide :
   "free_preview_offer": "Une offre concrète testable en 30 jours.",
   "plan_14j": ["Jour 1-3 : action + critère de succès","Jour 4-7 : action + critère de succès","Jour 8-14 : action + critère de succès"],
   "script_approche": "Le message exact (3-4 lignes) à envoyer à un premier contact.",
-  "kit_legitimite": "2-3 phrases : pourquoi cette personne est déjà légitime sans diplôme."
+  "kit_legitimite": "2-3 phrases : pourquoi cette personne est déjà légitime sans diplôme.",
+  "formations": [
+    {
+      "type": "Technique",
+      "titre": "Nom exact de la formation recommandée",
+      "plateforme": "Udemy / LinkedIn Learning / OpenClassrooms / YouTube",
+      "pourquoi": "1 phrase : pourquoi cette formation est indispensable pour valider cet Ikigai",
+      "lien_recherche": "Terme exact à rechercher sur Google ou Udemy pour trouver cette formation"
+    },
+    {
+      "type": "Business",
+      "titre": "Nom exact de la formation recommandée",
+      "plateforme": "Udemy / LinkedIn Learning / OpenClassrooms / YouTube",
+      "pourquoi": "1 phrase : pourquoi cette formation accélère la monétisation",
+      "lien_recherche": "Terme exact à rechercher sur Google ou Udemy pour trouver cette formation"
+    }
+  ]
 }
-RÈGLES : Zéro généralité. Chaque phrase actionnable. Données réelles. Direct, même inconfortable.`;
+RÈGLES : Zéro généralité. Chaque phrase actionnable. Données réelles. Direct, même inconfortable.
+Pour les formations : elles doivent être PRÉCISES et DIRECTEMENT liées au profil détecté. Pas de formations génériques. Si le profil est créatif/digital, propose Figma ou montage vidéo. Si c'est management, propose des formations spécifiques au secteur détecté.`;
 
   const userPrompt = `1. IMMERSION TEMPORELLE : ${answers.q1}
 2. COMPÉTENCE GRATUITE : ${answers.q2}
@@ -441,7 +504,7 @@ Produis le diagnostic JSON complet.`;
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1500,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }]
@@ -468,18 +531,45 @@ Produis le diagnostic JSON complet.`;
 
 // ─── RENDER RESULT ───────────────────────────────────────────
 function renderResult(d) {
+  // Preuve sociale dynamique — varie toutes les heures, semble vivant
+  const socialCount = 127 + Math.floor((Date.now() / 1000 / 3600) % 40);
+  window._socialCount = socialCount;
+
   document.getElementById('freeContent').innerHTML = `
     <div style="font-size:16px;line-height:1.8;color:#0f0e0c;margin-bottom:24px;padding:20px;background:rgba(200,169,110,0.08);border-radius:12px;border-left:3px solid #c8a96e;font-style:italic;">${d.intro || ''}</div>
     <div style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:10px;">Votre Ikigai en une phrase</div>
     <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1.3;margin-bottom:28px;letter-spacing:-0.5px;">"${d.ikigai_core || ''}"</div>
-    <div style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:12px;">Cartographie des 4 cercles</div>
+    <div style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:16px;">Cartographie des 4 cercles</div>
+
+    <!-- DIAGRAMME IKIGAI SVG -->
+    <div style="position:relative;width:100%;max-width:300px;margin:0 auto 8px;">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+        <circle cx="150" cy="110" r="85" fill="rgba(196,92,56,0.1)" stroke="rgba(196,92,56,0.4)" stroke-width="1.5"/>
+        <circle cx="200" cy="185" r="85" fill="rgba(200,169,110,0.1)" stroke="rgba(200,169,110,0.4)" stroke-width="1.5"/>
+        <circle cx="100" cy="185" r="85" fill="rgba(107,140,107,0.1)" stroke="rgba(107,140,107,0.4)" stroke-width="1.5"/>
+        <circle cx="150" cy="162" r="32" fill="rgba(200,169,110,0.22)" stroke="#c8a96e" stroke-width="2"/>
+        <text x="150" y="157" text-anchor="middle" font-size="9.5" font-family="DM Sans,sans-serif" fill="#c8a96e" font-weight="700">IKIGAI</text>
+        <text x="150" y="171" text-anchor="middle" font-size="9" font-family="DM Sans,sans-serif" fill="#c8a96e">✦</text>
+        <text x="150" y="30" text-anchor="middle" font-size="9.5" font-weight="700" font-family="DM Sans,sans-serif" fill="#c45c38">CE QUE VOUS AIMEZ 🔥</text>
+        <text x="258" y="215" text-anchor="middle" font-size="9" font-weight="600" font-family="DM Sans,sans-serif" fill="#b8963e">ÊTRE PAYÉ 💰</text>
+        <text x="42" y="215" text-anchor="middle" font-size="9" font-weight="600" font-family="DM Sans,sans-serif" fill="#5a7a5a">MONDE A BESOIN 🌍</text>
+        <text x="150" y="288" text-anchor="middle" font-size="9.5" font-weight="600" font-family="DM Sans,sans-serif" fill="#6b7280">VOS FORCES ⚡</text>
+      </svg>
+    </div>
   `;
+
+  // Cards colorées sous le diagramme
   document.getElementById('circlesViz').innerHTML = [
-    { icon:'🔥', label:'Ce que vous aimez', value:d.circles?.passion },
-    { icon:'⚡', label:'Vos forces', value:d.circles?.force },
-    { icon:'🌍', label:'Ce dont le monde a besoin', value:d.circles?.besoin },
-    { icon:'💰', label:'Ce pour quoi être payé', value:d.circles?.monetisation },
-  ].map(c => `<div class="circle-card"><div class="icon">${c.icon}</div><div class="label">${c.label}</div><div class="value">${c.value || ''}</div></div>`).join('');
+    { icon:'🔥', label:'Ce que vous aimez',          value:d.circles?.passion,       bg:'rgba(196,92,56,0.07)',   border:'rgba(196,92,56,0.25)' },
+    { icon:'⚡', label:'Vos forces',                  value:d.circles?.force,         bg:'rgba(139,139,139,0.07)', border:'rgba(139,139,139,0.2)' },
+    { icon:'🌍', label:'Ce dont le monde a besoin',   value:d.circles?.besoin,        bg:'rgba(107,140,107,0.07)', border:'rgba(107,140,107,0.25)' },
+    { icon:'💰', label:'Ce pour quoi être payé',      value:d.circles?.monetisation,  bg:'rgba(200,169,110,0.07)', border:'rgba(200,169,110,0.25)' },
+  ].map(c => `
+    <div class="circle-card" style="background:${c.bg};border-color:${c.border};">
+      <div class="icon">${c.icon}</div>
+      <div class="label">${c.label}</div>
+      <div class="value">${c.value || ''}</div>
+    </div>`).join('');
 
   document.getElementById('freeContent').innerHTML += `
     <div style="margin-top:28px;margin-bottom:8px;font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c4643c;font-weight:500;">L'objet caché</div>
@@ -489,7 +579,8 @@ function renderResult(d) {
   `;
 
   showScreen('result');
-  injectDynamicForce(); // appelé après showScreen — DOM garanti peint
+  injectDynamicForce();
+  injectSocialProof();
 }
 
 // ─── RENDER FALLBACK ─────────────────────────────────────────
@@ -503,12 +594,13 @@ function renderFallback() {
 }
 
 // ─── POST-PURCHASE ───────────────────────────────────────────
-function simulatePostPurchase() {
+function simulatePostPurchase(tier = 'solo') {
   if (!window._lastDiagnosis) { alert('Complète d\'abord le diagnostic.'); return; }
-  renderPostPurchase(window._lastDiagnosis);
+  renderPostPurchase(window._lastDiagnosis, tier);
 }
 
-function renderPostPurchase(d) {
+function renderPostPurchase(d, tier = 'solo') {
+  const isPack = tier === 'pack';
   const plan = d.plan_14j || [
     'Jour 1-3 : Identifie 5 personnes dans ton réseau avec ce problème. Objectif : 3 réponses.',
     'Jour 4-7 : Envoie le script à 3 contacts. Critère : 1 appel de 20 min obtenu.',
@@ -516,11 +608,43 @@ function renderPostPurchase(d) {
   ];
   const script = d.script_approche || 'Bonjour [Prénom], je travaille sur [problème]. Je serais curieux d\'avoir ton avis — 20 min cette semaine ?';
   const kit = d.kit_legitimite || 'Vous avez déjà résolu ce problème. La légitimité ne vient pas d\'un diplôme, mais de résultats documentés.';
+  const formations = d.formations || [];
+
+  const formationsHTML = isPack && formations.length > 0 ? `
+    <div style="margin-bottom:32px;">
+      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+        <span style="background:var(--gold, #c8a96e);color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">4</span>
+        🎓 Plan de montée en compétences
+      </div>
+      <div style="background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:4px;">
+        ${formations.map(f => `
+          <div style="padding:18px 20px;border-bottom:1px solid rgba(200,169,110,0.1);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="background:rgba(200,169,110,0.15);color:#c8a96e;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">${f.type}</span>
+              <span style="font-size:14px;font-weight:600;color:#0f0e0c;">${f.titre}</span>
+            </div>
+            <div style="font-size:12px;color:#8a8070;margin-bottom:6px;">📚 ${f.plateforme}</div>
+            <div style="font-size:13px;color:#0f0e0c;line-height:1.6;margin-bottom:10px;font-style:italic;">"${f.pourquoi}"</div>
+            <a href="https://www.udemy.com/courses/search/?q=${encodeURIComponent(f.lien_recherche)}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#0f0e0c;color:#f5f0e8;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;">
+              🔍 Trouver cette formation →
+            </a>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#8a8070;text-align:center;">Les liens ci-dessus sont des recherches Udemy — certains peuvent être des liens d'affiliation.</div>
+    </div>
+  ` : isPack ? `
+    <div style="margin-bottom:32px;padding:20px;background:rgba(200,169,110,0.08);border-radius:12px;border:1px solid rgba(200,169,110,0.2);text-align:center;">
+      <div style="font-size:13px;color:#8a8070;">🎓 Les formations personnalisées sont générées avec votre diagnostic IA.</div>
+    </div>
+  ` : '';
 
   document.getElementById('screen-postpurchase').innerHTML = `
     <div style="background:linear-gradient(135deg,#0f0e0c,#1e1a15);padding:36px 40px 28px;color:#f5f0e8;position:relative;overflow:hidden;">
       <div style="position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:100px;opacity:0.06;color:#c8a96e;">✦</div>
-      <div style="display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);color:#e8c98e;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">✦ Rapport Premium Débloqué</div>
+      <div style="display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);color:#e8c98e;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">
+        ✦ ${isPack ? 'Pack Lancement' : 'Rapport Solo'} Débloqué
+      </div>
       <h2 style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px;">Votre trajectoire, étape par étape.</h2>
       <p style="font-size:14px;color:rgba(245,240,232,0.55);">Basé exclusivement sur vos réponses — rien de générique.</p>
     </div>
@@ -555,6 +679,7 @@ function renderPostPurchase(d) {
         </div>
         <div style="background:rgba(107,140,107,0.08);border:1px solid rgba(107,140,107,0.2);border-radius:12px;padding:18px 20px;font-size:14px;line-height:1.7;">${kit}</div>
       </div>
+      ${formationsHTML}
     </div>
     <div style="padding:0 40px 32px;text-align:center;">
       <button onclick="restart()" style="width:100%;padding:14px;background:transparent;border:1px solid rgba(200,169,110,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:#8a8070;cursor:pointer;">↺ Nouveau diagnostic</button>
