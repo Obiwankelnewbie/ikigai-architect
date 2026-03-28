@@ -1,23 +1,37 @@
 // /api/analyze.js — Proxy Vercel sécurisé pour l'API Anthropic
 //
-// 📁 Structure GitHub attendue :
-//   /index.html          ← le frontend
-//   /api/analyze.js      ← ce fichier (proxy)
-//   /.gitignore          ← doit contenir .env
-//   /vercel.json         ← optionnel, routing automatique avec Vercel
+// 📁 Structure GitHub :
+//   /index.html       ← frontend
+//   /api/analyze.js   ← ce fichier
+//   /.gitignore
 //
 // 🔑 Sur Vercel → Settings → Environment Variables :
-//   Nom   : ANTHROPIC_API_KEY
-//   Valeur: sk-ant-xxxxxxxxxxxxxxxx
-//   (jamais dans le code, jamais sur GitHub)
+//   ANTHROPIC_API_KEY = sk-ant-xxxxxxx
+//   ⚠️ Après ajout : cliquer "Redeploy" pour que la variable soit active
 //
-// ✅ Ce fichier est safe à mettre en public sur GitHub.
-//    La clé n'apparaît nulle part ici.
+// ✅ Aucune clé dans ce fichier — safe à mettre sur GitHub public.
 
 export default async function handler(req, res) {
-  // Sécurité : méthode POST uniquement
+
+  // CORS — autorise les appels depuis le navigateur
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Preflight OPTIONS
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // POST uniquement
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Vérifie que la clé est configurée sur Vercel
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({
+      error: 'Clé API manquante',
+      fix: 'Ajouter ANTHROPIC_API_KEY dans Vercel → Settings → Environment Variables, puis Redeploy'
+    });
   }
 
   try {
@@ -29,7 +43,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: "claude-3-5-sonnet-20240620", // On force le cerveau ici
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 1500,
         system: req.body.system,
         messages: req.body.messages
@@ -37,14 +51,16 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    
-    // Si Anthropic renvoie une erreur, on la capture proprement
+
     if (!response.ok) {
+      console.error('Erreur Anthropic:', data);
       return res.status(response.status).json({ error: 'Erreur Anthropic', details: data });
     }
 
     return res.status(200).json(data);
+
   } catch (err) {
-    return res.status(500).json({ error: 'Erreur interne', details: err.message });
+    console.error('Erreur proxy:', err.message);
+    return res.status(500).json({ error: 'Erreur interne proxy', details: err.message });
   }
 }
