@@ -723,7 +723,7 @@ Produis le diagnostic JSON complet.`;
     // 🔒 Appel sécurisé via proxy Vercel — la clé ANTHROPIC_API_KEY
     // est stockée dans les variables d'environnement Vercel, jamais ici.
     // Le frontend n'a aucune clé exposée.
-    const res = await fetch('/api/analyze', {
+    const res = await fetch('/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
