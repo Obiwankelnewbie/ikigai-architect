@@ -8,380 +8,193 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0f0e0c; --cream: #f5f0e8; --warm: #e8e0d0;
-    --gold: #c8a96e; --gold-light: #e8c98e; --rust: #c45c38;
-    --sage: #6b8c6b; --muted: #8a8070; --card: #faf7f2;
-    --border: rgba(200,169,110,0.25); --shadow: 0 8px 40px rgba(15,14,12,0.12);
+    --ink:#0f0e0c; --cream:#f5f0e8; --warm:#e8e0d0;
+    --gold:#c8a96e; --gold-light:#e8c98e; --rust:#c45c38;
+    --sage:#6b8c6b; --muted:#8a8070; --card:#faf7f2;
+    --border:rgba(200,169,110,0.25); --shadow:0 8px 40px rgba(15,14,12,0.12);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); min-height:100vh; overflow-x:hidden; }
-  body::before {
-    content:''; position:fixed; inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events:none; z-index:1000; opacity:0.4;
-  }
-  .header { padding:28px 48px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(245,240,232,0.95); backdrop-filter:blur(12px); z-index:100; }
-  .logo { font-family:'Fraunces',serif; font-size:22px; font-weight:700; letter-spacing:-0.5px; color:var(--ink); }
-  .logo span { color:var(--gold); font-style:italic; }
-  .badge-free { background:var(--ink); color:var(--cream); padding:6px 14px; border-radius:20px; font-size:11px; font-weight:500; letter-spacing:1px; text-transform:uppercase; }
-  .hero { padding:80px 48px 60px; max-width:900px; margin:0 auto; text-align:center; animation:fadeUp 0.8s ease both; }
-  .eyebrow { display:inline-flex; align-items:center; gap:8px; background:rgba(200,169,110,0.15); border:1px solid var(--border); padding:6px 16px; border-radius:20px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); margin-bottom:28px; }
-  .hero h1 { font-family:'Fraunces',serif; font-size:clamp(38px,6vw,68px); font-weight:700; line-height:1.05; letter-spacing:-2px; margin-bottom:20px; }
-  .hero h1 em { font-style:italic; color:var(--gold); }
-  .hero p { font-size:18px; color:var(--muted); max-width:560px; margin:0 auto 40px; line-height:1.7; font-weight:300; }
-  .progress-wrap { max-width:680px; margin:0 auto 48px; animation:fadeUp 0.8s 0.2s ease both; opacity:0; }
-  .progress-bar { height:3px; background:var(--warm); border-radius:2px; overflow:hidden; margin-bottom:12px; }
-  .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--rust)); border-radius:2px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); width:0%; }
-  .progress-steps { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); letter-spacing:0.5px; }
-  .progress-steps span.active { color:var(--gold); font-weight:500; }
-  .main-card { max-width:680px; margin:0 auto; background:var(--card); border:1px solid var(--border); border-radius:20px; box-shadow:var(--shadow); overflow:hidden; animation:fadeUp 0.8s 0.3s ease both; opacity:0; }
-  .screen { display:none; }
-  .screen.active { display:block; }
-  .q-header { padding:32px 40px 24px; border-bottom:1px solid var(--border); background:linear-gradient(135deg,rgba(200,169,110,0.08),transparent); }
-  .q-num { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:10px; font-weight:500; }
-  .q-title { font-family:'Fraunces',serif; font-size:26px; font-weight:700; line-height:1.2; letter-spacing:-0.5px; }
-  .q-subtitle { font-size:14px; color:var(--muted); margin-top:8px; line-height:1.6; font-weight:300; }
-  .q-body { padding:32px 40px; }
-  textarea { width:100%; min-height:130px; background:var(--warm); border:2px solid transparent; border-radius:12px; padding:18px 20px; font-family:'DM Sans',sans-serif; font-size:15px; color:var(--ink); resize:vertical; outline:none; transition:border-color 0.2s,background 0.2s; line-height:1.6; }
-  textarea::placeholder { color:var(--muted); }
-  textarea:focus { border-color:var(--gold); background:#faf7f0; }
-  .char-count { font-size:12px; color:var(--muted); text-align:right; margin-top:8px; }
-  .btn-row { display:flex; gap:12px; align-items:center; padding:0 40px 32px; }
-  .btn-primary { flex:1; padding:16px 28px; background:var(--ink); color:var(--cream); border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; cursor:pointer; transition:transform 0.15s,box-shadow 0.15s,background 0.2s; letter-spacing:0.3px; }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(15,14,12,0.2); background:#1a1916; }
-  .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
-  .btn-back { padding:16px 20px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; cursor:pointer; transition:all 0.15s; }
-  .btn-back:hover { border-color:var(--gold); color:var(--ink); }
-  .tip-box { margin:0 40px 24px; background:rgba(200,169,110,0.1); border-left:3px solid var(--gold); padding:14px 18px; border-radius:0 10px 10px 0; font-size:13px; color:var(--muted); line-height:1.6; }
-  .tip-box strong { color:var(--gold); font-weight:500; }
-  /* LOADER — flex centré garanti sur mobile */
-  #screen-loading { padding:72px 40px; text-align:center; flex-direction:column; align-items:center; justify-content:center; }
-  #screen-loading.active { display:flex; }
-  .loader-ring { width:64px; height:64px; border:3px solid var(--warm); border-top-color:var(--gold); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 28px; }
-  .loader-title { font-family:'Fraunces',serif; font-size:22px; font-weight:700; margin-bottom:10px; }
-  .loader-steps { list-style:none; }
-  .loader-steps li { font-size:13px; color:var(--muted); padding:4px 0; opacity:0; animation:fadeUp 0.5s ease both; display:flex; align-items:center; justify-content:center; gap:8px; }
-  .loader-steps li:nth-child(1) { animation-delay:0.5s; }
-  .loader-steps li:nth-child(2) { animation-delay:1.2s; }
-  .loader-steps li:nth-child(3) { animation-delay:2s; }
-  .loader-steps li:nth-child(4) { animation-delay:2.8s; }
-  .loader-steps li::before { content:'◆'; color:var(--gold); font-size:8px; }
-  #screen-result { padding:0; }
-  .result-header { padding:36px 40px 28px; background:linear-gradient(135deg,var(--ink) 0%,#2a2520 100%); color:var(--cream); position:relative; overflow:hidden; }
-  .result-header::after { content:'◎'; position:absolute; right:36px; top:50%; transform:translateY(-50%); font-size:80px; opacity:0.08; color:var(--gold); }
-  .result-badge { display:inline-block; background:rgba(200,169,110,0.2); border:1px solid rgba(200,169,110,0.4); color:var(--gold-light); padding:5px 14px; border-radius:20px; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
-  .result-header h2 { font-family:'Fraunces',serif; font-size:28px; font-weight:700; line-height:1.2; }
-  .result-header p { margin-top:10px; font-size:14px; color:rgba(245,240,232,0.6); font-weight:300; }
-  .result-body { padding:36px 40px; }
-  .result-text { font-size:15px; line-height:1.85; color:var(--ink); }
-  .circles-viz { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:24px 0; }
-  .circle-card { background:var(--warm); border-radius:12px; padding:18px 20px; border:1px solid var(--border); }
-  .circle-card .icon { font-size:22px; margin-bottom:8px; }
-  .circle-card .label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); font-weight:500; margin-bottom:6px; }
-  .circle-card .value { font-size:14px; font-weight:500; line-height:1.5; }
-  .paywall-banner { margin:32px 40px; background:linear-gradient(135deg,#1a1916,#2a2520); border-radius:16px; padding:32px; color:var(--cream); text-align:center; border:1px solid rgba(200,169,110,0.3); position:relative; overflow:hidden; }
-  .paywall-banner::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 70% 50%,rgba(200,169,110,0.15),transparent 60%); }
-  .btn-unlock { background:var(--gold); color:var(--ink); border:none; padding:16px 36px; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; position:relative; z-index:1; letter-spacing:0.3px; }
-  .btn-unlock:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:0 8px 28px rgba(200,169,110,0.4); }
-  .blur-section { position:relative; margin:0 40px 32px; overflow:hidden; border-radius:12px; }
-  .blur-content { filter:blur(6px); user-select:none; font-size:14px; line-height:1.8; color:var(--muted); padding:20px; background:var(--warm); border-radius:12px; }
-  .blur-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,transparent 0%,rgba(245,240,232,0.95) 60%); display:flex; align-items:flex-end; justify-content:center; padding-bottom:20px; }
-  .blur-label { background:var(--card); border:1px solid var(--border); padding:8px 20px; border-radius:20px; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); }
-  .footer { text-align:center; padding:48px 24px; font-size:12px; color:var(--muted); letter-spacing:0.5px; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:0.4;}
 
-  /* ── CASH SCORE & VIABILITY ── */
-  .scores-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
-  .score-card { background:var(--warm); border-radius:14px; padding:18px 20px; border:1px solid var(--border); text-align:center; }
-  .score-card.gold { background:rgba(200,169,110,0.1); border-color:rgba(200,169,110,0.4); }
-  .score-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:500; margin-bottom:8px; }
-  .score-value { font-family:'Fraunces',serif; font-size:36px; font-weight:700; line-height:1; color:var(--gold); }
-  .score-sub { font-size:11px; color:var(--muted); margin-top:6px; }
-  .viability-bar { height:6px; background:rgba(200,169,110,0.2); border-radius:3px; margin-top:10px; overflow:hidden; }
-  .viability-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--rust)); border-radius:3px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); width:0%; }
+  /* NAV FLOTTANTE */
+  .nav-outer{padding:20px 32px 0;position:sticky;top:0;z-index:200;}
+  .nav-float{background:rgba(245,240,232,0.92);backdrop-filter:blur(20px);border-radius:16px;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 32px rgba(15,14,12,0.10),0 1px 0 rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.18);transition:box-shadow 0.3s;}
+  .nav-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;letter-spacing:-0.5px;color:var(--ink);}
+  .nav-logo span{color:var(--gold);font-style:italic;}
+  .nav-badge{background:var(--ink);color:var(--cream);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background 0.2s,transform 0.15s;border:none;font-family:'DM Sans',sans-serif;}
+  .nav-badge:hover{background:#2a2520;transform:translateY(-1px);}
+  .nav-badge-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:navPulse 2.5s infinite;}
+  @keyframes navPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.4)}}
 
-  /* ── COPY BOXES ── */
-  .copy-box { background:var(--warm); border:1px dashed rgba(200,169,110,0.3); border-radius:12px; padding:16px 18px; margin:12px 0; position:relative; }
-  .copy-box-text { font-size:13px; line-height:1.7; color:var(--ink); white-space:pre-wrap; }
-  .btn-copy { display:flex; align-items:center; gap:6px; margin-top:10px; padding:8px 16px; background:var(--ink); color:var(--cream); border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
-  .btn-copy:hover { background:#2a2520; transform:translateY(-1px); }
-  .btn-copy.linkedin { background:#0077B5; }
-  .btn-copy.linkedin:hover { background:#005e8e; }
-  .btn-copy.success { background:var(--sage); }
+  /* HERO PLEIN ÉCRAN */
+  .hero-wrap{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;margin-top:-76px;}
+  .hero-img{position:absolute;inset:-8%;width:116%;height:116%;background-image:url('/Gemini_Generated_Image_odem3godem3godem.png');background-size:cover;background-position:center 40%;z-index:0;animation:kenBurns 28s ease-in-out infinite alternate;will-change:transform;filter:saturate(1.1) brightness(1.03);}
+  @keyframes kenBurns{
+    0%{transform:scale(1.0) translateX(0px) translateY(0px);}
+    33%{transform:scale(1.06) translateX(-18px) translateY(-10px);}
+    66%{transform:scale(1.10) translateX(12px) translateY(-18px);}
+    100%{transform:scale(1.14) translateX(-8px) translateY(-25px);}
+  }
+  .hero-video-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(245,240,232,0.15) 0%,rgba(245,240,232,0.05) 40%,rgba(245,240,232,0.55) 80%,rgba(245,240,232,1.0) 100%);}
+  .hero-text-block{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;width:100%;max-width:860px;padding:0 40px;}
+  .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.45);backdrop-filter:blur(12px);padding:7px 18px;border-radius:100px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;font-weight:500;}
+  .hero-h1{font-family:'Fraunces',serif;font-size:clamp(44px,7vw,86px);font-weight:700;line-height:1.0;letter-spacing:-3px;color:var(--ink);margin-bottom:20px;text-shadow:0 2px 40px rgba(245,240,232,0.8);}
+  .hero-h1 em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:18px;color:var(--muted);max-width:500px;margin:0 auto 36px;line-height:1.65;font-weight:300;text-shadow:0 1px 20px rgba(245,240,232,0.9);}
+  .hero-cta-pill{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--cream);border:none;border-radius:100px;padding:15px 28px 15px 20px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 24px rgba(15,14,12,0.25);}
+  .hero-cta-pill:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(15,14,12,0.35);}
+  .cta-arrow{width:32px;height:32px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.2s;}
+  .hero-cta-pill:hover .cta-arrow{transform:rotate(45deg);}
+  .hero-stats-bar{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:10;display:flex;align-items:center;background:rgba(245,240,232,0.75);backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,0.25);border-radius:100px;padding:12px 32px;}
+  .hero-stat{text-align:center;padding:0 24px;}
+  .hero-stat-num{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.5px;}
+  .hero-stat-label{font-size:10px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:1px;}
+  .hero-stat-sep{width:1px;height:32px;background:var(--border);}
+  .hero-scroll{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;animation:scrollBounce 2s ease-in-out infinite;}
+  @keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 
-  /* ── HERO PLEIN ÉCRAN VIDÉO ── */
-  .hero-wrap {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 600px;
-    overflow: hidden;
-    margin-top: -76px;
-  }
+  /* PROGRESS */
+  .progress-wrap{max-width:680px;margin:0 auto 48px;animation:fadeUp 0.8s 0.2s ease both;opacity:0;}
+  .progress-bar{height:3px;background:var(--warm);border-radius:2px;overflow:hidden;margin-bottom:12px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rust));border-radius:2px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);width:0%;}
+  .progress-steps{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);letter-spacing:0.5px;}
+  .progress-steps span.active{color:var(--gold);font-weight:500;}
 
-  /* VIDÉO/IMAGE FOND PLEIN ÉCRAN */
-  .hero-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    z-index: 0;
-    display: none; /* fallback si pas de vidéo */
-  }
+  /* MAIN CARD */
+  .main-card{max-width:680px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp 0.8s 0.3s ease both;opacity:0;}
+  .screen{display:none;}.screen.active{display:block;}
+  .q-header{padding:32px 40px 24px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(200,169,110,0.08),transparent);}
+  .q-num{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500;}
+  .q-title{font-family:'Fraunces',serif;font-size:26px;font-weight:700;line-height:1.2;letter-spacing:-0.5px;}
+  .q-subtitle{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6;font-weight:300;}
+  .q-body{padding:32px 40px;}
+  textarea{width:100%;min-height:130px;background:var(--warm);border:2px solid transparent;border-radius:12px;padding:18px 20px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);resize:vertical;outline:none;transition:border-color 0.2s,background 0.2s;line-height:1.6;}
+  textarea::placeholder{color:var(--muted);}
+  textarea:focus{border-color:var(--gold);background:#faf7f0;}
+  .char-count{font-size:12px;color:var(--muted);text-align:right;margin-top:8px;}
+  .btn-row{display:flex;gap:12px;align-items:center;padding:0 40px 32px;}
+  .btn-primary{flex:1;padding:16px 28px;background:var(--ink);color:var(--cream);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,background 0.2s;letter-spacing:0.3px;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,14,12,0.2);background:#1a1916;}
+  .btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-back{padding:16px 20px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.15s;}
+  .btn-back:hover{border-color:var(--gold);color:var(--ink);}
+  .tip-box{margin:0 40px 24px;background:rgba(200,169,110,0.1);border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 10px 10px 0;font-size:13px;color:var(--muted);line-height:1.6;}
+  .tip-box strong{color:var(--gold);font-weight:500;}
 
-  /* IMAGE FOND — effet Ken Burns */
-  .hero-img {
-    position: absolute;
-    inset: -8%;
-    width: 116%;
-    height: 116%;
-    background-image: url('/Gemini_Generated_Image_odem3godem3godem.png');
-    background-size: cover;
-    background-position: center 40%;
-    z-index: 0;
-    animation: kenBurns 28s ease-in-out infinite alternate;
-    will-change: transform;
-    filter: saturate(1.1) brightness(1.03);
-  }
+  /* LOADER */
+  #screen-loading{padding:72px 40px;text-align:center;flex-direction:column;align-items:center;justify-content:center;}
+  #screen-loading.active{display:flex;}
+  .loader-ring{width:64px;height:64px;border:3px solid var(--warm);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 28px;}
+  .loader-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin-bottom:10px;}
+  .loader-steps{list-style:none;}
+  .loader-steps li{font-size:13px;color:var(--muted);padding:4px 0;opacity:0;animation:fadeUp 0.5s ease both;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .loader-steps li:nth-child(1){animation-delay:0.5s;}
+  .loader-steps li:nth-child(2){animation-delay:1.2s;}
+  .loader-steps li:nth-child(3){animation-delay:2s;}
+  .loader-steps li:nth-child(4){animation-delay:2.8s;}
+  .loader-steps li::before{content:'◆';color:var(--gold);font-size:8px;}
 
-  /* Ken Burns — zoom lent + légère dérive droite/gauche */
-  @keyframes kenBurns {
-    0%   { transform: scale(1.0)  translateX(0px)   translateY(0px); }
-    33%  { transform: scale(1.06) translateX(-18px)  translateY(-10px); }
-    66%  { transform: scale(1.10) translateX(12px)  translateY(-18px); }
-    100% { transform: scale(1.14) translateX(-8px)  translateY(-25px); }
-  }
+  /* RESULT */
+  #screen-result{padding:0;}
+  .result-header{padding:36px 40px 28px;background:linear-gradient(135deg,var(--ink) 0%,#2a2520 100%);color:var(--cream);position:relative;overflow:hidden;}
+  .result-header::after{content:'◎';position:absolute;right:36px;top:50%;transform:translateY(-50%);font-size:80px;opacity:0.08;color:var(--gold);}
+  .result-badge{display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);color:var(--gold-light);padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+  .result-header h2{font-family:'Fraunces',serif;font-size:28px;font-weight:700;line-height:1.2;}
+  .result-header p{margin-top:10px;font-size:14px;color:rgba(245,240,232,0.6);font-weight:300;}
+  .result-body{padding:36px 40px;}
+  .result-text{font-size:15px;line-height:1.85;color:var(--ink);}
+  .circles-viz{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0;}
+  .circle-card{background:var(--warm);border-radius:12px;padding:18px 20px;border:1px solid var(--border);}
+  .circle-card .icon{font-size:22px;margin-bottom:8px;}
+  .circle-card .label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:6px;}
+  .circle-card .value{font-size:14px;font-weight:500;line-height:1.5;}
 
-  /* Overlay subtil — lisibilité texte sans cacher la vidéo */
-  .hero-video-overlay {
-    position: absolute; inset: 0; z-index: 1;
-    background:
-      linear-gradient(to bottom,
-        rgba(245,240,232,0.15) 0%,
-        rgba(245,240,232,0.05) 40%,
-        rgba(245,240,232,0.55) 80%,
-        rgba(245,240,232,1.0) 100%
-      ),
-      radial-gradient(ellipse at 50% 50%, rgba(245,240,232,0.08) 0%, transparent 70%);
-  }
+  /* SCORES */
+  .scores-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+  .score-card{background:var(--warm);border-radius:14px;padding:18px 20px;border:1px solid var(--border);text-align:center;}
+  .score-card.gold{background:rgba(200,169,110,0.1);border-color:rgba(200,169,110,0.4);}
+  .score-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:8px;}
+  .score-value{font-family:'Fraunces',serif;font-size:36px;font-weight:700;line-height:1;color:var(--gold);}
+  .score-sub{font-size:11px;color:var(--muted);margin-top:6px;}
+  .viability-bar{height:6px;background:rgba(200,169,110,0.2);border-radius:3px;margin-top:10px;overflow:hidden;}
+  .viability-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rust));border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);width:0%;}
 
-  /* TEXTE centré sur la vidéo */
-  .hero-text-block {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    text-align: center;
-    width: 100%;
-    max-width: 860px;
-    padding: 0 40px;
-  }
+  /* COPY BOXES */
+  .copy-box{background:var(--warm);border:1px dashed rgba(200,169,110,0.3);border-radius:12px;padding:16px 18px;margin:12px 0;}
+  .copy-box-text{font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
+  .btn-copy{display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 16px;background:var(--ink);color:var(--cream);border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .btn-copy:hover{background:#2a2520;transform:translateY(-1px);}
+  .btn-copy.linkedin{background:#0077B5;}
+  .btn-copy.linkedin:hover{background:#005e8e;}
+  .btn-copy.success{background:var(--sage);}
+  .brand-kit{background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.2);border-radius:14px;padding:20px 22px;margin:20px 0;}
 
-  .hero-pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(200,169,110,0.2);
-    border: 1px solid rgba(200,169,110,0.45);
-    backdrop-filter: blur(12px);
-    padding: 7px 18px; border-radius: 100px;
-    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 24px; font-weight: 500;
-  }
+  /* PAYWALL */
+  .paywall-banner{margin:32px 40px;background:linear-gradient(135deg,#1a1916,#2a2520);border-radius:16px;padding:32px;color:var(--cream);text-align:center;border:1px solid rgba(200,169,110,0.3);position:relative;overflow:hidden;}
+  .paywall-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,rgba(200,169,110,0.15),transparent 60%);}
+  .btn-unlock{background:var(--gold);color:var(--ink);border:none;padding:16px 36px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;position:relative;z-index:1;letter-spacing:0.3px;}
+  .btn-unlock:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,169,110,0.4);}
+  .blur-section{position:relative;margin:0 40px 32px;overflow:hidden;border-radius:12px;}
+  .blur-content{filter:blur(6px);user-select:none;font-size:14px;line-height:1.8;color:var(--muted);padding:20px;background:var(--warm);border-radius:12px;}
+  .blur-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(245,240,232,0.95) 60%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:20px;}
+  .blur-label{background:var(--card);border:1px solid var(--border);padding:8px 20px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+  .footer{text-align:center;padding:48px 24px;font-size:12px;color:var(--muted);letter-spacing:0.5px;}
 
-  .hero-h1 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(44px, 7vw, 86px);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -3px;
-    color: var(--ink);
-    margin-bottom: 20px;
-    text-shadow: 0 2px 40px rgba(245,240,232,0.8);
-  }
-  .hero-h1 em { font-style: italic; color: var(--gold); }
-
-  .hero-sub {
-    font-size: 18px; color: var(--muted);
-    max-width: 500px; margin: 0 auto 36px;
-    line-height: 1.65; font-weight: 300;
-    text-shadow: 0 1px 20px rgba(245,240,232,0.9);
-  }
-
-  .hero-cta-pill {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: var(--ink); color: var(--cream);
-    border: none; border-radius: 100px;
-    padding: 15px 28px 15px 20px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 500; cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 24px rgba(15,14,12,0.25);
-  }
-  .hero-cta-pill:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 36px rgba(15,14,12,0.35);
-  }
-  .cta-arrow {
-    width: 32px; height: 32px;
-    background: var(--gold); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: transform 0.2s;
-  }
-  .hero-cta-pill:hover .cta-arrow { transform: rotate(45deg); }
-
-  /* Stats en bas de l'écran */
-  .hero-stats-bar {
-    position: absolute;
-    bottom: 40px; left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex; align-items: center; gap: 0;
-    background: rgba(245,240,232,0.75);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(200,169,110,0.25);
-    border-radius: 100px;
-    padding: 12px 32px;
-  }
-  .hero-stat { text-align: center; padding: 0 24px; }
-  .hero-stat-num { font-family:'Fraunces',serif; font-size:22px; font-weight:700; color:var(--ink); letter-spacing:-0.5px; }
-  .hero-stat-label { font-size:10px; color:var(--muted); letter-spacing:0.5px; text-transform:uppercase; margin-top:1px; }
-  .hero-stat-sep { width:1px; height:32px; background:var(--border); }
-
-  /* Scroll indicator */
-  .hero-scroll {
-    position: absolute; bottom: 110px; left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    color: var(--muted); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-    animation: scrollBounce 2s ease-in-out infinite;
-  }
-  @keyframes scrollBounce {
-    0%,100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
-  }
-
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
   @media(max-width:640px){
-    .hero-wrap { height:90vh; }
-    .hero-text-block { padding: 0 24px; }
-    .hero-h1 { letter-spacing: -2px; }
-    .hero-stats-bar { bottom: 24px; padding: 10px 20px; }
-    .hero-stat { padding: 0 14px; }
-    .hero-stat-num { font-size: 18px; }
-    .hero-scroll { bottom: 90px; }
-  }
-  /* ── NAV FLOTTANTE PREMIUM ── */
-  .nav-outer { padding:20px 32px 0; position:sticky; top:0; z-index:200; }
-  .nav-float {
-    background: rgba(245,240,232,0.92);
-    backdrop-filter: blur(20px);
-    border-radius: 16px;
-    padding: 10px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 32px rgba(15,14,12,0.10), 0 1px 0 rgba(200,169,110,0.2);
-    border: 1px solid rgba(200,169,110,0.18);
-    transition: box-shadow 0.3s;
-  }
-  .nav-logo { font-family:'Fraunces',serif; font-size:20px; font-weight:700; letter-spacing:-0.5px; color:var(--ink); }
-  .nav-logo span { color:var(--gold); font-style:italic; }
-  .nav-badge { background:var(--ink); color:var(--cream); padding:7px 16px; border-radius:100px; font-size:12px; font-weight:500; letter-spacing:0.5px; display:flex; align-items:center; gap:8px; cursor:pointer; transition:background 0.2s, transform 0.15s; border:none; font-family:'DM Sans',sans-serif; }
-  .nav-badge:hover { background:#2a2520; transform:translateY(-1px); }
-  .nav-badge-dot { width:7px; height:7px; background:var(--gold); border-radius:50%; animation:navPulse 2.5s infinite; }
-  @keyframes navPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.4)} }
-
-  /* ── HERO AMÉLIORÉ ── */
-  .hero-pill { display:inline-flex; align-items:center; gap:8px; background:rgba(200,169,110,0.12); border:1px solid rgba(200,169,110,0.3); padding:7px 18px; border-radius:100px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); margin-bottom:24px; font-weight:500; }
-  .hero-cta-pill { display:inline-flex; align-items:center; gap:12px; background:var(--ink); color:var(--cream); border:none; border-radius:100px; padding:14px 24px 14px 18px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(15,14,12,0.2); margin-top:8px; }
-  .hero-cta-pill:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(15,14,12,0.3); }
-  .cta-arrow { width:32px; height:32px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.2s; }
-  .hero-cta-pill:hover .cta-arrow { transform:rotate(45deg); }
-  .hero-stats { display:flex; gap:32px; justify-content:center; margin-top:32px; padding-top:24px; border-top:1px solid var(--border); }
-  .hero-stat { text-align:center; }
-  .hero-stat-num { font-family:'Fraunces',serif; font-size:28px; font-weight:700; color:var(--ink); letter-spacing:-1px; }
-  .hero-stat-label { font-size:11px; color:var(--muted); letter-spacing:0.5px; text-transform:uppercase; margin-top:2px; }
-
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes spin { to{transform:rotate(360deg)} }
-  @media(max-width:640px) {
-    .nav-outer{padding:12px 16px 0}
-    .hero{padding:48px 24px 40px}
-    .q-header,.q-body,.btn-row{padding-left:24px;padding-right:24px}
-    .tip-box{margin-left:24px;margin-right:24px}
-    .result-body,.result-header{padding:24px}
-    .paywall-banner,.blur-section{margin-left:24px;margin-right:24px}
-    .circles-viz{grid-template-columns:1fr}
-    .hero-stats{gap:20px}
-    .hero-scene{height:200px;border-radius:16px;}
+    .nav-outer{padding:12px 16px 0;}
+    .hero-wrap{height:90vh;}
+    .hero-text-block{padding:0 24px;}
+    .hero-h1{letter-spacing:-2px;}
+    .hero-stats-bar{bottom:24px;padding:10px 20px;}
+    .hero-stat{padding:0 14px;}
+    .hero-stat-num{font-size:18px;}
+    .hero-scroll{bottom:90px;}
+    .q-header,.q-body,.btn-row{padding-left:24px;padding-right:24px;}
+    .tip-box{margin-left:24px;margin-right:24px;}
+    .result-body,.result-header{padding:24px;}
+    .paywall-banner,.blur-section{margin-left:24px;margin-right:24px;}
+    .circles-viz{grid-template-columns:1fr;}
+    .scores-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
 <body>
 
-<!-- NAV FLOTTANTE PREMIUM -->
 <div class="nav-outer">
   <nav class="nav-float">
     <div class="nav-logo">IKIGAI <span>Architect</span></div>
-    <button class="nav-badge">
-      <div class="nav-badge-dot"></div>
-      Accès Gratuit
-    </button>
+    <button class="nav-badge"><div class="nav-badge-dot"></div>Accès Gratuit</button>
   </nav>
 </div>
 
 <div class="hero-wrap">
-
-  <!-- IMAGE PLEIN ÉCRAN avec effet Ken Burns -->
   <div class="hero-img"></div>
-
-  <!-- OVERLAY subtil pour lisibilité -->
   <div class="hero-video-overlay"></div>
-
-  <!-- TEXTE CENTRÉ PAR-DESSUS -->
   <div class="hero-text-block">
     <div class="hero-pill">⬡ Diagnostic de Carrière par IA</div>
-    <h1 class="hero-h1">
-      Votre reconversion,<br><em>cartographiée</em> avec précision.
-    </h1>
-    <p class="hero-sub">
-      6 questions. 4 minutes. Un plan d'action concret<br>et personnalisé pour votre prochain chapitre.
-    </p>
+    <h1 class="hero-h1">Votre reconversion,<br><em>cartographiée</em> avec précision.</h1>
+    <p class="hero-sub">6 questions. 4 minutes. Un plan d'action concret<br>et personnalisé pour votre prochain chapitre.</p>
     <button class="hero-cta-pill" onclick="document.getElementById('mainCard').scrollIntoView({behavior:'smooth'})">
       <div class="cta-arrow">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M2 12L12 2M12 2H5M12 2V9" stroke="#0f0e0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="#0f0e0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       Démarrer mon diagnostic
     </button>
   </div>
-
-  <!-- SCROLL INDICATOR -->
   <div class="hero-scroll">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M8 3L8 13M8 13L4 9M8 13L12 9" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3L8 13M8 13L4 9M8 13L12 9" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     Défiler
   </div>
-
-  <!-- STATS FLOTTANTES EN BAS -->
   <div class="hero-stats-bar">
-    <div class="hero-stat">
-      <div class="hero-stat-num">4 min</div>
-      <div class="hero-stat-label">Pour compléter</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num">4 min</div><div class="hero-stat-label">Pour compléter</div></div>
     <div class="hero-stat-sep"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num" id="heroCount">127+</div>
-      <div class="hero-stat-label">Reconversions activées</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num" id="heroCount">127+</div><div class="hero-stat-label">Reconversions activées</div></div>
     <div class="hero-stat-sep"></div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">19€</div>
-      <div class="hero-stat-label">Plan complet</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-num">19€</div><div class="hero-stat-label">Plan complet</div></div>
   </div>
-
 </div>
 
 <div class="progress-wrap">
@@ -389,114 +202,50 @@
   <div class="progress-steps" id="progressSteps"></div>
 </div>
 
-<div class="main-card">
+<div class="main-card" id="mainCard">
 
-  <!-- Q1 -->
   <div class="screen active" id="screen-q1">
-    <div class="q-header">
-      <div class="q-num">Question 1 sur 6</div>
-      <div class="q-title">Le temps qui disparaît</div>
-      <div class="q-subtitle">Quand perdez-vous totalement la notion du temps ? Quelle activité vous absorbe sans effort, même hors travail ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans1" placeholder="Ex: Je passe des heures à analyser des stratégies business, décortiquer des organisations..." oninput="updateChar('ans1','c1')"></textarea>
-      <div class="char-count" id="c1">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 1 sur 6</div><div class="q-title">Le temps qui disparaît</div><div class="q-subtitle">Quand perdez-vous totalement la notion du temps ? Quelle activité vous absorbe sans effort, même hors travail ?</div></div>
+    <div class="q-body"><textarea id="ans1" placeholder="Ex: Je passe des heures à analyser des stratégies business..." oninput="updateChar('ans1','c1')"></textarea><div class="char-count" id="c1">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> Pensez aux week-ends, soirées, lectures spontanées. L'obsession vraie n'a pas besoin de motivation.</div>
     <div class="btn-row"><button class="btn-primary" onclick="nextStep(1)">Continuer →</button></div>
   </div>
 
-  <!-- Q2 -->
   <div class="screen" id="screen-q2">
-    <div class="q-header">
-      <div class="q-num">Question 2 sur 6</div>
-      <div class="q-title">La compétence invisible</div>
-      <div class="q-subtitle">Quelle chose vous faites naturellement "bien" et que les autres vous demandent souvent de l'aide pour y réfléchir ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans2" placeholder="Ex: On me demande souvent de relire des stratégies, d'expliquer des concepts complexes..." oninput="updateChar('ans2','c2')"></textarea>
-      <div class="char-count" id="c2">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 2 sur 6</div><div class="q-title">La compétence invisible</div><div class="q-subtitle">Quelle chose vous faites naturellement "bien" et que les autres vous demandent souvent de l'aide pour y réfléchir ?</div></div>
+    <div class="q-body"><textarea id="ans2" placeholder="Ex: On me demande souvent de relire des stratégies..." oninput="updateChar('ans2','c2')"></textarea><div class="char-count" id="c2">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> Ce que vous trouvez "banal" est souvent rare. Si ça vous semble évident, c'est probablement une force.</div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(2)">←</button>
-      <button class="btn-primary" onclick="nextStep(2)">Continuer →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(2)">←</button><button class="btn-primary" onclick="nextStep(2)">Continuer →</button></div>
   </div>
 
-  <!-- Q3 -->
   <div class="screen" id="screen-q3">
-    <div class="q-header">
-      <div class="q-num">Question 3 sur 6</div>
-      <div class="q-title">L'irritant profond</div>
-      <div class="q-subtitle">Qu'est-ce qui vous énerve profondément dans votre secteur ou job actuel ? Une inefficacité, une absurdité ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans3" placeholder="Ex: Je ne supporte plus que les RH traitent les talents comme des cases à cocher..." oninput="updateChar('ans3','c3')"></textarea>
-      <div class="char-count" id="c3">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 3 sur 6</div><div class="q-title">L'irritant profond</div><div class="q-subtitle">Qu'est-ce qui vous énerve profondément dans votre secteur ou job actuel ?</div></div>
+    <div class="q-body"><textarea id="ans3" placeholder="Ex: Je ne supporte plus que les RH traitent les talents comme des cases à cocher..." oninput="updateChar('ans3','c3')"></textarea><div class="char-count" id="c3">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> L'irritant est souvent la source d'une offre. Votre agacement = un problème que quelqu'un paie pour résoudre.</div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(3)">←</button>
-      <button class="btn-primary" onclick="nextStep(3)">Continuer →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(3)">←</button><button class="btn-primary" onclick="nextStep(3)">Continuer →</button></div>
   </div>
 
-  <!-- Q4 -->
   <div class="screen" id="screen-q4">
-    <div class="q-header">
-      <div class="q-num">Question 4 sur 6</div>
-      <div class="q-title">La surprise financière</div>
-      <div class="q-subtitle">Avez-vous déjà été payé (ou félicité) pour quelque chose qui vous semblait simple ou évident à faire ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans4" placeholder="Ex: Un ami m'a payé pour restructurer son CV. Ma boîte me valorise pour mes présentations..." oninput="updateChar('ans4','c4')"></textarea>
-      <div class="char-count" id="c4">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 4 sur 6</div><div class="q-title">La surprise financière</div><div class="q-subtitle">Avez-vous déjà été payé (ou félicité) pour quelque chose qui vous semblait simple ou évident ?</div></div>
+    <div class="q-body"><textarea id="ans4" placeholder="Ex: Un ami m'a payé pour restructurer son CV..." oninput="updateChar('ans4','c4')"></textarea><div class="char-count" id="c4">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> Si quelqu'un a déjà mis de l'argent sur quelque chose que vous faites, le marché a déjà validé.</div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(4)">←</button>
-      <button class="btn-primary" onclick="nextStep(4)">Continuer →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(4)">←</button><button class="btn-primary" onclick="nextStep(4)">Continuer →</button></div>
   </div>
 
-  <!-- Q5 -->
   <div class="screen" id="screen-q5">
-    <div class="q-header">
-      <div class="q-num">Question 5 sur 6</div>
-      <div class="q-title">Le rejet par défaut</div>
-      <div class="q-subtitle">Quelle piste avez-vous rejetée en pensant "ce n'est pas pour moi" ou "ça ne se monétise pas" ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans5" placeholder="Ex: J'ai toujours voulu former des équipes mais je me dis que je ne suis pas assez légitime..." oninput="updateChar('ans5','c5')"></textarea>
-      <div class="char-count" id="c5">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 5 sur 6</div><div class="q-title">Le rejet par défaut</div><div class="q-subtitle">Quelle piste avez-vous rejetée en pensant "ce n'est pas pour moi" ou "ça ne se monétise pas" ?</div></div>
+    <div class="q-body"><textarea id="ans5" placeholder="Ex: J'ai toujours voulu former des équipes mais je me dis que je ne suis pas assez légitime..." oninput="updateChar('ans5','c5')"></textarea><div class="char-count" id="c5">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> Ce que vous rejetez le plus vite est souvent l'option la plus alignée. La résistance est un signal.</div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(5)">←</button>
-      <button class="btn-primary" onclick="nextStep(5)">Continuer →</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(5)">←</button><button class="btn-primary" onclick="nextStep(5)">Continuer →</button></div>
   </div>
 
-  <!-- Q6 -->
   <div class="screen" id="screen-q6">
-    <div class="q-header">
-      <div class="q-num">Question 6 sur 6</div>
-      <div class="q-title">Le bilan énergétique</div>
-      <div class="q-subtitle">En ce moment, votre travail vous donne-t-il de l'énergie ou vous en prend-il ?</div>
-    </div>
-    <div class="q-body">
-      <textarea id="ans6" placeholder="Ex: Je me traîne chaque matin. Le sens m'échappe. Le dimanche soir est lourd..." oninput="updateChar('ans6','c6')"></textarea>
-      <div class="char-count" id="c6">0 / 400</div>
-    </div>
+    <div class="q-header"><div class="q-num">Question 6 sur 6</div><div class="q-title">Le bilan énergétique</div><div class="q-subtitle">En ce moment, votre travail vous donne-t-il de l'énergie ou vous en prend-il ?</div></div>
+    <div class="q-body"><textarea id="ans6" placeholder="Ex: Je me traîne chaque matin. Le sens m'échappe..." oninput="updateChar('ans6','c6')"></textarea><div class="char-count" id="c6">0 / 400</div></div>
     <div class="tip-box"><strong>Conseil :</strong> Soyez honnête. La fatigue chronique est souvent le signal le plus clair qu'un changement est nécessaire.</div>
-    <div class="btn-row">
-      <button class="btn-back" onclick="prevStep(6)">←</button>
-      <button class="btn-primary" onclick="analyze()">🔍 Lancer l'analyse IA</button>
-    </div>
+    <div class="btn-row"><button class="btn-back" onclick="prevStep(6)">←</button><button class="btn-primary" onclick="analyze()">🔍 Lancer l'analyse IA</button></div>
   </div>
 
-  <!-- LOADING -->
   <div class="screen" id="screen-loading">
     <div class="loader-ring"></div>
     <div class="loader-title">Cartographie en cours...</div>
@@ -508,7 +257,6 @@
     </ul>
   </div>
 
-  <!-- RESULT -->
   <div class="screen" id="screen-result">
     <div class="result-header">
       <div class="result-badge">✦ Diagnostic IA Complété</div>
@@ -520,14 +268,11 @@
       <div class="circles-viz" id="circlesViz"></div>
     </div>
     <div class="blur-section">
-      <div class="blur-content">Plan d'action 90 jours · Validation marché en 14 jours · Votre première offre concrète · Script d'approche client · Kit de légitimité immédiate · Pivot commercial anti-échec...</div>
-      <div class="blur-overlay">
-        <div class="blur-label"><span>🔒</span> Plan complet inclus dans le rapport Premium</div>
-      </div>
+      <div class="blur-content">Plan d'action 90 jours · Validation marché en 14 jours · Votre première offre concrète · Script d'approche client · Kit de légitimité immédiate...</div>
+      <div class="blur-overlay"><div class="blur-label"><span>🔒</span> Plan complet inclus dans le rapport Premium</div></div>
     </div>
     <div class="paywall-banner">
-
-      <!-- COMING SOON — AGENT IA -->
+      <!-- COMING SOON AGENT IA -->
       <div style="position:relative;z-index:1;margin-bottom:28px;padding:20px 22px;background:rgba(107,140,107,0.12);border:1px solid rgba(107,140,107,0.35);border-radius:14px;text-align:left;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
           <span style="font-size:18px;">🤖</span>
@@ -535,60 +280,30 @@
           <div style="background:rgba(107,140,107,0.2);border:1px solid rgba(107,140,107,0.4);color:#a8c8a8;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-left:auto;">Coming Soon</div>
         </div>
         <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--cream);margin-bottom:6px;">Votre Agent IA Coach Personnel</div>
-        <div style="font-size:13px;color:rgba(245,240,232,0.6);line-height:1.7;margin-bottom:14px;">
-          Onboarding J1 · Diagnostic de blocages · Plan quotidien J1–J30 · Suivi actif qui relance, adapte et célèbre chaque victoire.
-        </div>
+        <div style="font-size:13px;color:rgba(245,240,232,0.6);line-height:1.7;margin-bottom:14px;">Onboarding J1 · Diagnostic de blocages · Plan quotidien J1–J30 · Suivi actif qui relance, adapte et célèbre chaque victoire.</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
           <span style="background:rgba(107,140,107,0.15);border:1px solid rgba(107,140,107,0.3);color:#a8c8a8;padding:4px 12px;border-radius:20px;font-size:11px;">✓ Micro-tâches quotidiennes</span>
           <span style="background:rgba(107,140,107,0.15);border:1px solid rgba(107,140,107,0.3);color:#a8c8a8;padding:4px 12px;border-radius:20px;font-size:11px;">✓ Suivi actif 30 jours</span>
           <span style="background:rgba(107,140,107,0.15);border:1px solid rgba(107,140,107,0.3);color:#a8c8a8;padding:4px 12px;border-radius:20px;font-size:11px;">✓ Premier client garanti</span>
         </div>
         <div style="display:flex;gap:10px;align-items:center;">
-          <input type="email" id="waitlistEmail" placeholder="Votre email pour être notifié en premier"
-            style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(107,140,107,0.35);border-radius:10px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-          <button onclick="joinWaitlist()" style="padding:10px 18px;background:rgba(107,140,107,0.8);border:none;border-radius:10px;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.2s;" onmouseover="this.style.background='rgba(107,140,107,1)'" onmouseout="this.style.background='rgba(107,140,107,0.8)'">
-            Me prévenir →
-          </button>
+          <input type="email" id="waitlistEmail" placeholder="Votre email pour être notifié en premier" style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(107,140,107,0.35);border-radius:10px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+          <button onclick="joinWaitlist()" style="padding:10px 18px;background:rgba(107,140,107,0.8);border:none;border-radius:10px;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Me prévenir →</button>
         </div>
-        <div id="waitlistConfirm" style="display:none;margin-top:10px;font-size:12px;color:#a8c8a8;">✅ Super ! Vous serez parmi les premiers notifiés au lancement.</div>
-        <div style="margin-top:10px;font-size:11px;color:rgba(245,240,232,0.3);">97€/mois · Sans engagement · Accès prioritaire pour les early adopters</div>
+        <div id="waitlistConfirm" style="display:none;margin-top:10px;font-size:12px;color:#a8c8a8;">✅ Vous serez parmi les premiers notifiés au lancement.</div>
+        <div style="margin-top:10px;font-size:11px;color:rgba(245,240,232,0.3);">97€/mois · Sans engagement · Accès prioritaire early adopters</div>
       </div>
+      <!-- PAYWALL COPY -->
       <div style="position:relative;z-index:1;">
         <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(232,201,142,0.7);margin-bottom:14px;font-weight:500;">🏛️ Diagnostic formel</div>
         <h3 style="font-family:'Fraunces',serif;font-size:20px;line-height:1.35;margin-bottom:16px;">Votre intersection est exploitable<br><em style="color:var(--gold-light);font-style:italic;">dès maintenant.</em></h3>
-        <p style="font-size:15px;color:rgba(245,240,232,0.75);line-height:1.7;margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;">
-          Nous avons identifié une configuration rare entre
-          <strong style="color:var(--cream);" id="dynamicForce">une de vos forces clés</strong>
-          et un irritant réel du marché.<br><br>
-          Ce n'est plus une hypothèse.<br>
-          <strong style="color:var(--cream);">C'est une opportunité exploitable.</strong><br><br>
-          Mais sans système, ça reste une idée qui tourne en boucle.
-        </p>
+        <p style="font-size:15px;color:rgba(245,240,232,0.75);line-height:1.7;margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto;">Nous avons identifié une configuration rare entre <strong style="color:var(--cream);" id="dynamicForce">une de vos forces clés</strong> et un irritant réel du marché.<br><br>Ce n'est plus une hypothèse.<br><strong style="color:var(--cream);">C'est une opportunité exploitable.</strong></p>
       </div>
-      <div style="position:relative;z-index:1;text-align:left;max-width:460px;margin:0 auto 28px;display:flex;flex-direction:column;gap:16px;">
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;">
-          <div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Plan Commando (14 jours)</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Sécurisez vos 3 premiers clients sans quitter votre poste actuel.</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;">
-          <div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Ingénierie de l'offre</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Transformez ce que vous savez déjà faire en offre claire et vendable.</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;">
-          <div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Script d'approche</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Le message exact pour vos premiers rendez-vous — sans "prospecter" ni passer pour un vendeur de tapis.</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;">
-          <div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Kit anti-imposteur</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Vos arguments de légitimité basés sur vos acquis réels (pas de nouveau diplôme).</div>
-        </div>
-      </div>
-      <div style="position:relative;z-index:1;margin-bottom:24px;padding:18px 20px;background:rgba(200,169,110,0.1);border-radius:12px;border:1px solid rgba(200,169,110,0.25);">
-        <p style="font-size:15px;color:rgba(245,240,232,0.8);line-height:1.7;">
-          Aujourd'hui, vous avez une piste.<br>
-          <strong style="color:var(--cream);">Sans plan, elle disparaît lundi.</strong><br>
-          Avec ce système, elle devient une trajectoire.
-        </p>
+      <div style="position:relative;z-index:1;text-align:left;max-width:460px;margin:0 auto 28px;display:flex;flex-direction:column;gap:12px;">
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;"><div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Plan Commando (14 jours)</div><div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Sécurisez vos 3 premiers clients sans quitter votre poste actuel.</div></div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;"><div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Ingénierie de l'offre</div><div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Transformez ce que vous savez déjà faire en offre claire et vendable.</div></div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;"><div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Script d'approche</div><div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Le message exact pour vos premiers rendez-vous — sans "prospecter".</div></div>
+        <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;"><div style="font-size:13px;font-weight:600;color:var(--gold-light);margin-bottom:4px;">👉 Kit anti-imposteur</div><div style="font-size:13px;color:rgba(245,240,232,0.65);line-height:1.6;">Vos arguments de légitimité basés sur vos acquis réels (pas de nouveau diplôme).</div></div>
       </div>
       <div style="position:relative;z-index:1;margin-bottom:20px;">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.25);padding:8px 16px;border-radius:20px;">
@@ -597,57 +312,35 @@
         </div>
       </div>
       <div style="position:relative;z-index:1;margin-bottom:20px;padding:14px 20px;border-top:1px solid rgba(200,169,110,0.2);border-bottom:1px solid rgba(200,169,110,0.2);">
-        <p style="font-size:14px;color:rgba(245,240,232,0.75);line-height:1.6;">
-          Vous n'achetez pas un rapport.<br>
-          <strong style="color:var(--cream);">Vous achetez votre première étape concrète hors du flou.</strong>
-        </p>
+        <p style="font-size:14px;color:rgba(245,240,232,0.75);line-height:1.6;">Vous n'achetez pas un rapport.<br><strong style="color:var(--cream);">Vous achetez votre première étape concrète hors du flou.</strong></p>
       </div>
-
-      <!-- UPSELL 2 NIVEAUX -->
+      <!-- UPSELL -->
       <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:12px;">
-
-        <!-- Option 1 — Solo 19€ -->
         <div style="border:1px solid rgba(200,169,110,0.3);border-radius:14px;padding:20px 22px;text-align:left;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div style="font-size:13px;font-weight:600;color:var(--gold-light);">📄 Rapport Solo</div>
             <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--cream);">19€</div>
           </div>
           <ul style="font-size:12px;color:rgba(245,240,232,0.6);line-height:1.8;list-style:none;margin-bottom:14px;">
-            <li>✓ Plan Commando 14 jours</li>
-            <li>✓ Ingénierie de votre offre</li>
-            <li>✓ Script d'approche client</li>
-            <li>✓ Kit anti-imposteur</li>
+            <li>✓ Plan Commando 14 jours</li><li>✓ Ingénierie de votre offre</li><li>✓ Script d'approche client</li><li>✓ Kit anti-imposteur</li>
           </ul>
-          <button onclick="simulatePostPurchase('solo')" style="width:100%;padding:13px;background:rgba(200,169,110,0.15);border:1px solid rgba(200,169,110,0.4);border-radius:10px;color:var(--gold-light);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(200,169,110,0.25)'" onmouseout="this.style.background='rgba(200,169,110,0.15)'">
-            Choisir le Rapport Solo — 19€
-          </button>
+          <button onclick="simulatePostPurchase('solo')" style="width:100%;padding:13px;background:rgba(200,169,110,0.15);border:1px solid rgba(200,169,110,0.4);border-radius:10px;color:var(--gold-light);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;">Choisir le Rapport Solo — 19€</button>
         </div>
-
-        <!-- Option 2 — Pack Lancement 49€ (recommandé) -->
         <div style="border:2px solid var(--gold);border-radius:14px;padding:20px 22px;text-align:left;position:relative;background:rgba(200,169,110,0.06);">
           <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);padding:4px 16px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">⭐ Recommandé</div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div style="font-size:13px;font-weight:600;color:var(--gold-light);">🚀 Pack Lancement</div>
-            <div style="display:flex;align-items:baseline;gap:8px;">
-              <span style="font-size:13px;color:rgba(245,240,232,0.3);text-decoration:line-through;">69€</span>
-              <span style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--gold-light);">49€</span>
-            </div>
+            <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-size:13px;color:rgba(245,240,232,0.3);text-decoration:line-through;">69€</span><span style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--gold-light);">49€</span></div>
           </div>
-          <ul style="font-size:12px;color:rgba(245,240,232,0.6);line-height:1.8;list-style:none;margin-bottom:6px;">
+          <ul style="font-size:12px;color:rgba(245,240,232,0.6);line-height:1.8;list-style:none;margin-bottom:14px;">
             <li>✓ Tout le Rapport Solo</li>
             <li style="color:var(--gold-light);font-weight:500;">✓ 🎓 Plan de montée en compétences personnalisé</li>
             <li style="color:var(--gold-light);font-weight:500;">✓ 2 formations ciblées sur votre profil exact</li>
             <li style="color:var(--gold-light);font-weight:500;">✓ Mini-formation vidéo "3 premiers clients sans budget"</li>
           </ul>
-          <div style="font-size:11px;color:rgba(245,240,232,0.35);margin-bottom:14px;font-style:italic;">Économisez 20€ — offre de lancement</div>
-          <button onclick="simulatePostPurchase('pack')" style="width:100%;padding:15px;background:var(--gold);border:none;border-radius:10px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--gold-light)';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='var(--gold)';this.style.transform='translateY(0)'">
-            Choisir le Pack Lancement — 49€
-          </button>
+          <button onclick="simulatePostPurchase('pack')" style="width:100%;padding:15px;background:var(--gold);border:none;border-radius:10px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Choisir le Pack Lancement — 49€</button>
         </div>
-
-        <div style="font-size:11px;color:rgba(245,240,232,0.3);text-align:center;margin-top:4px;">
-          ✓ Accès immédiat &nbsp;·&nbsp; ✓ Paiement unique &nbsp;·&nbsp; ✓ Sans abonnement caché
-        </div>
+        <div style="font-size:11px;color:rgba(245,240,232,0.3);text-align:center;">✓ Accès immédiat &nbsp;·&nbsp; ✓ Paiement unique &nbsp;·&nbsp; ✓ Sans abonnement caché</div>
       </div>
     </div>
     <div style="padding:0 40px 32px;text-align:center;">
@@ -655,217 +348,60 @@
     </div>
   </div>
 
-  <!-- POST-PURCHASE -->
   <div class="screen" id="screen-postpurchase"></div>
-
 </div>
 
 <div class="footer">IKIGAI Architect · Diagnostic de précision pour reconversions · Powered by Claude AI</div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────
-const STEPS = ['Temps','Forces','Irritants','Validation','Résistances','Énergie'];
-let currentStep = 1;
+const STEPS=['Temps','Forces','Irritants','Validation','Résistances','Énergie'];
+let currentStep=1;
 
-// ─── UI HELPERS ──────────────────────────────────────────────
-function updateChar(id, cid) {
-  document.getElementById(cid).textContent = document.getElementById(id).value.length + ' / 400';
-}
+function updateChar(id,cid){document.getElementById(cid).textContent=document.getElementById(id).value.length+' / 400';}
+function updateProgress(){const pct=((currentStep-1)/6)*100;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressSteps').innerHTML=STEPS.map((s,i)=>`<span class="${i+1<=currentStep?'active':''}">${s}</span>`).join('');}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
+function nextStep(from){const ans=document.getElementById('ans'+from);if(!ans||ans.value.trim().length<10){ans.style.borderColor='var(--rust)';setTimeout(()=>ans.style.borderColor='transparent',1500);return;}currentStep=from+1;updateProgress();showScreen('q'+currentStep);}
+function prevStep(from){currentStep=from-1;updateProgress();showScreen('q'+currentStep);}
+function restart(){currentStep=1;for(let i=1;i<=6;i++){const el=document.getElementById('ans'+i);if(el)el.value='';const c=document.getElementById('c'+i);if(c)c.textContent='0 / 400';}updateProgress();showScreen('q1');}
 
-function updateProgress() {
-  const pct = ((currentStep - 1) / 6) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressSteps').innerHTML = STEPS.map((s, i) =>
-    `<span class="${i + 1 <= currentStep ? 'active' : ''}">${s}</span>`
-  ).join('');
-}
+function injectDynamicForce(){const force=window._lastAnswers?.q2;if(!force)return;const s=force.split('.')[0].trim().slice(0,80);requestAnimationFrame(()=>{const el=document.getElementById('dynamicForce');if(el&&s)el.textContent=s;});}
+function injectSocialProof(){requestAnimationFrame(()=>{const el=document.getElementById('socialCount');if(el&&window._socialCount)el.textContent=window._socialCount;});}
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-}
+function joinWaitlist(){const email=document.getElementById('waitlistEmail')?.value?.trim();if(!email||!email.includes('@')){document.getElementById('waitlistEmail').style.borderColor='rgba(196,92,56,0.6)';setTimeout(()=>document.getElementById('waitlistEmail').style.borderColor='rgba(107,140,107,0.35)',1500);return;}const w=JSON.parse(localStorage.getItem('ikigai_waitlist')||'[]');if(!w.includes(email)){w.push(email);localStorage.setItem('ikigai_waitlist',JSON.stringify(w));}document.getElementById('waitlistEmail').style.display='none';document.querySelector('[onclick="joinWaitlist()"]').style.display='none';document.getElementById('waitlistConfirm').style.display='block';}
 
-function nextStep(from) {
-  const ans = document.getElementById('ans' + from);
-  if (!ans || ans.value.trim().length < 10) {
-    ans.style.borderColor = 'var(--rust)';
-    setTimeout(() => ans.style.borderColor = 'transparent', 1500);
-    return;
-  }
-  currentStep = from + 1;
-  updateProgress();
-  showScreen('q' + currentStep);
-}
-
-function prevStep(from) {
-  currentStep = from - 1;
-  updateProgress();
-  showScreen('q' + currentStep);
-}
-
-function restart() {
-  currentStep = 1;
-  for (let i = 1; i <= 6; i++) {
-    const el = document.getElementById('ans' + i);
-    if (el) el.value = '';
-    const c = document.getElementById('c' + i);
-    if (c) c.textContent = '0 / 400';
-  }
-  updateProgress();
-  showScreen('q1');
-}
-
-// ─── INJECTION DYNAMIQUE ─────────────────────────────────────
-function injectDynamicForce() {
-  const force = window._lastAnswers?.q2;
-  if (!force) return;
-  const shortForce = force.split('.')[0].trim().slice(0, 80);
-  requestAnimationFrame(() => {
-    const el = document.getElementById('dynamicForce');
-    if (el && shortForce) el.textContent = shortForce;
-  });
-}
-
-function injectSocialProof() {
-  requestAnimationFrame(() => {
-    const el = document.getElementById('socialCount');
-    if (el && window._socialCount) el.textContent = window._socialCount;
-  });
-}
-
-// ─── ANALYSE IA ───────────────────────────────────────────────
-// 🔒 ARCHITECTURE SÉCURISÉE :
-//    Ce frontend appelle /api/analyze (proxy Vercel).
-//    La clé ANTHROPIC_API_KEY est stockée UNIQUEMENT dans les
-//    variables d'environnement Vercel — jamais dans ce fichier.
-// ─────────────────────────────────────────────────────────────
-async function analyze() {
-  const answers = {
-    q1: document.getElementById('ans1').value,
-    q2: document.getElementById('ans2').value,
-    q3: document.getElementById('ans3').value,
-    q4: document.getElementById('ans4').value,
-    q5: document.getElementById('ans5').value,
-    q6: document.getElementById('ans6').value,
-  };
-  window._lastAnswers = answers;
+async function analyze(){
+  const answers={q1:document.getElementById('ans1').value,q2:document.getElementById('ans2').value,q3:document.getElementById('ans3').value,q4:document.getElementById('ans4').value,q5:document.getElementById('ans5').value,q6:document.getElementById('ans6').value};
+  window._lastAnswers=answers;
   showScreen('loading');
-
-  const systemPrompt = `Tu es un architecte de carrière expert, chirurgical et précis. Tu analyses les données d'un salarié en reconversion professionnelle selon le cadre Ikigai optimisé.
-TON RÔLE : Produire un diagnostic de valeur réelle, pas des encouragements vagues.
+  const systemPrompt=`Tu es un architecte de carrière expert, chirurgical et précis. Tu analyses les données d'un salarié en reconversion professionnelle selon le cadre Ikigai optimisé.
 FORMAT DE RÉPONSE OBLIGATOIRE — réponds UNIQUEMENT en JSON valide :
-{
-  "intro": "2-3 phrases percutantes. Commence par 'Voici ce que je peux voir...'",
-  "circles": {
-    "passion": "Ce qui obsède vraiment cette personne (1 phrase précise)",
-    "force": "La compétence rare qu'elle sous-estime (1 phrase précise)",
-    "besoin": "Le problème de marché que ça adresse (1 phrase précise)",
-    "monetisation": "La forme économique la plus viable (1 phrase précise)"
-  },
-  "ikigai_core": "La phrase Ikigai en 10-15 mots. Précis, pas inspirationnel.",
-  "hidden_object": "L'option évidente rejetée. 2-3 phrases. Commence par 'Ce que vous évitez...'",
-  "free_preview_offer": "Une offre concrète testable en 30 jours.",
-  "cash_score": 2500,
-  "viability_score": 78,
-  "niche": "Nom court de la niche cible (ex: Coaching RH, Design UX freelance)",
-  "nom_marque": "3 noms de marque possibles séparés par des /",
-  "bio_linkedin": "Bio LinkedIn commençant par J'aide... (2 lignes max, accrocheuse)",
-  "post_linkedin": "Post de lancement LinkedIn prêt à copier-coller. Commence par une accroche choc, inclut l'offre, finit par un appel à l'action (Dites MOI en commentaire). 5-7 lignes max.",
-  "dm_vente": "Message DM direct à envoyer sur LinkedIn/WhatsApp. Commence par Salut 👋, personnalisé avec la niche, propose un échange de 5 min. 4-5 lignes.",
-  "plan_14j": ["Jour 1-3 : action + critère de succès","Jour 4-7 : action + critère de succès","Jour 8-14 : action + critère de succès"],
-  "script_approche": "Le message exact (3-4 lignes) à envoyer à un premier contact.",
-  "kit_legitimite": "2-3 phrases : pourquoi cette personne est déjà légitime sans diplôme.",
-  "formations": [
-    {
-      "type": "Technique",
-      "titre": "Nom exact de la formation recommandée",
-      "plateforme": "Udemy / LinkedIn Learning / OpenClassrooms / YouTube",
-      "pourquoi": "1 phrase : pourquoi cette formation est indispensable pour valider cet Ikigai",
-      "lien_recherche": "Terme exact à rechercher sur Google ou Udemy"
-    },
-    {
-      "type": "Business",
-      "titre": "Nom exact de la formation recommandée",
-      "plateforme": "Udemy / LinkedIn Learning / OpenClassrooms / YouTube",
-      "pourquoi": "1 phrase : pourquoi cette formation accélère la monétisation",
-      "lien_recherche": "Terme exact à rechercher sur Google ou Udemy"
-    }
-  ]
-}
-RÈGLES : Zéro généralité. Chaque phrase actionnable. Données réelles. Direct, même inconfortable.
-Pour cash_score : estime un revenu mensuel réaliste entre 1500 et 6000€ selon la niche et le profil.
-Pour viability_score : note entre 60 et 95 selon la force du profil, la clarté de la niche et la demande marché.
-Pour les formations : PRÉCISES et DIRECTEMENT liées au profil. Pas de générique.`;
-
-  const userPrompt = `1. IMMERSION TEMPORELLE : ${answers.q1}
-2. COMPÉTENCE GRATUITE : ${answers.q2}
-3. IRRITANT RÉEL : ${answers.q3}
-4. SURPRISE FINANCIÈRE : ${answers.q4}
-5. REJET PAR DÉFAUT : ${answers.q5}
-6. BILAN ÉNERGÉTIQUE : ${answers.q6}
-Produis le diagnostic JSON complet.`;
-
-  try {
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 2500,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error('Erreur proxy:', res.status, err);
-      throw new Error('Erreur serveur ' + res.status);
-    }
-
-    const data = await res.json();
-    const raw = data.content.map(b => b.text || '').join('');
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    window._lastDiagnosis = parsed;
+{"intro":"2-3 phrases. Commence par 'Voici ce que je peux voir...'","circles":{"passion":"1 phrase","force":"1 phrase","besoin":"1 phrase","monetisation":"1 phrase"},"ikigai_core":"10-15 mots max","hidden_object":"2-3 phrases. Commence par 'Ce que vous évitez...'","free_preview_offer":"offre concrète 30 jours","cash_score":2500,"viability_score":78,"niche":"nom court niche","nom_marque":"3 noms séparés /","bio_linkedin":"J'aide... 2 lignes","post_linkedin":"post LinkedIn 5-7 lignes","dm_vente":"DM 4-5 lignes","plan_14j":["Jour 1-3 : action","Jour 4-7 : action","Jour 8-14 : action"],"script_approche":"message 3-4 lignes","kit_legitimite":"2-3 phrases","formations":[{"type":"Technique","titre":"nom","plateforme":"plateforme","pourquoi":"1 phrase","lien_recherche":"terme"},{"type":"Business","titre":"nom","plateforme":"plateforme","pourquoi":"1 phrase","lien_recherche":"terme"}]}
+RÈGLES : Zéro généralité. Données réelles. Direct. cash_score entre 1500-6000. viability_score entre 60-95.`;
+  const userPrompt=`1. IMMERSION: ${answers.q1}\n2. COMPÉTENCE: ${answers.q2}\n3. IRRITANT: ${answers.q3}\n4. FINANCIER: ${answers.q4}\n5. REJET: ${answers.q5}\n6. ÉNERGIE: ${answers.q6}`;
+  try{
+    const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2500,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})});
+    if(!res.ok)throw new Error('Erreur '+res.status);
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    window._lastDiagnosis=parsed;
     renderResult(parsed);
-  } catch (err) {
-    console.error('Détail erreur:', err);
-    renderFallback();
-  }
+  }catch(err){console.error(err);renderFallback();}
 }
 
-// ─── RENDER RESULT ───────────────────────────────────────────
-function renderResult(d) {
-  const socialCount = 127 + Math.floor((Date.now() / 1000 / 3600) % 40);
-  window._socialCount = socialCount;
-  const cashVal = parseInt(d.cash_score) || 2500;
-  const viability = parseInt(d.viability_score) || 75;
-
-  document.getElementById('freeContent').innerHTML = `
-    <!-- SCORES -->
+function renderResult(d){
+  const socialCount=127+Math.floor((Date.now()/1000/3600)%40);
+  window._socialCount=socialCount;
+  const cashVal=parseInt(d.cash_score)||2500;
+  const viability=parseInt(d.viability_score)||75;
+  document.getElementById('freeContent').innerHTML=`
     <div class="scores-grid">
-      <div class="score-card">
-        <div class="score-label">Indice de viabilité</div>
-        <div class="score-value" id="viabilityVal">0%</div>
-        <div class="viability-bar"><div class="viability-fill" id="viabilityFill"></div></div>
-        <div class="score-sub">Basé sur votre profil</div>
-      </div>
-      <div class="score-card gold">
-        <div class="score-label">💰 Potentiel mensuel</div>
-        <div class="score-value" id="cashDisplay">0€</div>
-        <div class="score-sub">${d.niche || 'Votre niche'}</div>
-      </div>
+      <div class="score-card"><div class="score-label">Indice de viabilité</div><div class="score-value" id="viabilityVal">0%</div><div class="viability-bar"><div class="viability-fill" id="viabilityFill"></div></div><div class="score-sub">Basé sur votre profil</div></div>
+      <div class="score-card gold"><div class="score-label">💰 Potentiel mensuel</div><div class="score-value" id="cashDisplay">0€</div><div class="score-sub">${d.niche||'Votre niche'}</div></div>
     </div>
-
-    <!-- INTRO -->
-    <div style="font-size:16px;line-height:1.8;color:#0f0e0c;margin-bottom:24px;padding:20px;background:rgba(200,169,110,0.08);border-radius:12px;border-left:3px solid #c8a96e;font-style:italic;">${d.intro || ''}</div>
-
-    <!-- IKIGAI -->
+    <div style="font-size:16px;line-height:1.8;color:#0f0e0c;margin-bottom:24px;padding:20px;background:rgba(200,169,110,0.08);border-radius:12px;border-left:3px solid #c8a96e;font-style:italic;">${d.intro||''}</div>
     <div style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:10px;">Votre Ikigai en une phrase</div>
-    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1.3;margin-bottom:28px;letter-spacing:-0.5px;">"${d.ikigai_core || ''}"</div>
-
-    <!-- DIAGRAMME -->
+    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1.3;margin-bottom:28px;letter-spacing:-0.5px;">"${d.ikigai_core||''}"</div>
     <div style="font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:16px;">Cartographie des 4 cercles</div>
     <div style="position:relative;width:100%;max-width:300px;margin:0 auto 8px;">
       <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -880,261 +416,76 @@ function renderResult(d) {
         <text x="42" y="215" text-anchor="middle" font-size="9" font-weight="600" font-family="DM Sans,sans-serif" fill="#5a7a5a">MONDE A BESOIN 🌍</text>
         <text x="150" y="288" text-anchor="middle" font-size="9.5" font-weight="600" font-family="DM Sans,sans-serif" fill="#6b7280">VOS FORCES ⚡</text>
       </svg>
-    </div>
-  `;
-
-  document.getElementById('circlesViz').innerHTML = [
-    { icon:'🔥', label:'Ce que vous aimez',         value:d.circles?.passion,      bg:'rgba(196,92,56,0.07)',   border:'rgba(196,92,56,0.25)' },
-    { icon:'⚡', label:'Vos forces',                 value:d.circles?.force,        bg:'rgba(139,139,139,0.07)', border:'rgba(139,139,139,0.2)' },
-    { icon:'🌍', label:'Ce dont le monde a besoin',  value:d.circles?.besoin,       bg:'rgba(107,140,107,0.07)', border:'rgba(107,140,107,0.25)' },
-    { icon:'💰', label:'Ce pour quoi être payé',     value:d.circles?.monetisation, bg:'rgba(200,169,110,0.07)', border:'rgba(200,169,110,0.25)' },
-  ].map(c => `
-    <div class="circle-card" style="background:${c.bg};border-color:${c.border};">
-      <div class="icon">${c.icon}</div>
-      <div class="label">${c.label}</div>
-      <div class="value">${c.value || ''}</div>
-    </div>`).join('');
-
-  document.getElementById('freeContent').innerHTML += `
+    </div>`;
+  document.getElementById('circlesViz').innerHTML=[
+    {icon:'🔥',label:'Ce que vous aimez',value:d.circles?.passion,bg:'rgba(196,92,56,0.07)',border:'rgba(196,92,56,0.25)'},
+    {icon:'⚡',label:'Vos forces',value:d.circles?.force,bg:'rgba(139,139,139,0.07)',border:'rgba(139,139,139,0.2)'},
+    {icon:'🌍',label:'Ce dont le monde a besoin',value:d.circles?.besoin,bg:'rgba(107,140,107,0.07)',border:'rgba(107,140,107,0.25)'},
+    {icon:'💰',label:'Ce pour quoi être payé',value:d.circles?.monetisation,bg:'rgba(200,169,110,0.07)',border:'rgba(200,169,110,0.25)'},
+  ].map(c=>`<div class="circle-card" style="background:${c.bg};border-color:${c.border};"><div class="icon">${c.icon}</div><div class="label">${c.label}</div><div class="value">${c.value||''}</div></div>`).join('');
+  document.getElementById('freeContent').innerHTML+=`
     <div style="margin-top:28px;margin-bottom:8px;font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#c4643c;font-weight:500;">L'objet caché</div>
-    <div style="font-size:15px;line-height:1.75;padding:18px 20px;background:rgba(196,92,56,0.08);border-left:3px solid #c4643c;border-radius:0 10px 10px 0;">${d.hidden_object || ''}</div>
+    <div style="font-size:15px;line-height:1.75;padding:18px 20px;background:rgba(196,92,56,0.08);border-left:3px solid #c4643c;border-radius:0 10px 10px 0;">${d.hidden_object||''}</div>
     <div style="margin-top:24px;margin-bottom:8px;font-family:'Fraunces',serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#6b8c6b;font-weight:500;">Première offre testable</div>
-    <div style="font-size:17px;font-weight:600;padding:16px 20px;background:rgba(107,140,107,0.1);border-radius:10px;border:1px solid rgba(107,140,107,0.25);margin-bottom:28px;">✓ ${d.free_preview_offer || ''}</div>
-
-    <!-- KIT DE MARQUE -->
+    <div style="font-size:17px;font-weight:600;padding:16px 20px;background:rgba(107,140,107,0.1);border-radius:10px;border:1px solid rgba(107,140,107,0.25);margin-bottom:28px;">✓ ${d.free_preview_offer||''}</div>
     <div class="brand-kit">
       <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:14px;">🏗️ Kit de Marque</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">Noms proposés</div>
-      <div style="font-size:14px;font-weight:600;margin-bottom:14px;color:#0f0e0c;">${d.nom_marque || ''}</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:14px;color:#0f0e0c;">${d.nom_marque||''}</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">Bio LinkedIn</div>
-      <div class="copy-box">
-        <div class="copy-box-text" id="bioLinkedin">${d.bio_linkedin || ''}</div>
-        <button class="btn-copy linkedin" onclick="copyAndPulse('bioLinkedin', this)">📋 Copier la bio</button>
-      </div>
+      <div class="copy-box"><div class="copy-box-text" id="bioLinkedin">${d.bio_linkedin||''}</div><button class="btn-copy linkedin" onclick="copyAndPulse('bioLinkedin',this)">📋 Copier la bio</button></div>
     </div>
-
-    <!-- POST LINKEDIN -->
     <div style="margin-top:24px;">
       <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px;">📢 Post de Lancement LinkedIn</div>
-      <div class="copy-box">
-        <div class="copy-box-text" id="postLinkedin">${(d.post_linkedin || '').replace(/\\n/g,'\n')}</div>
-        <button class="btn-copy linkedin" onclick="copyAndPulse('postLinkedin', this)">📱 Copier · Publier à 8h30</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;font-style:italic;">💡 Mardi ou Jeudi 8h30 = maximum d'impact</div>
+      <div class="copy-box"><div class="copy-box-text" id="postLinkedin">${(d.post_linkedin||'').replace(/\\n/g,'\n')}</div><button class="btn-copy linkedin" onclick="copyAndPulse('postLinkedin',this)">📱 Copier · Publier à 8h30</button></div>
     </div>
-
-    <!-- DM DE VENTE -->
     <div style="margin-top:24px;margin-bottom:8px;">
-      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px;">💬 DM de Vente (LinkedIn / WhatsApp)</div>
-      <div class="copy-box">
-        <div class="copy-box-text" id="dmVente">${(d.dm_vente || '').replace(/\\n/g,'\n')}</div>
-        <button class="btn-copy" onclick="copyAndPulse('dmVente', this)">📲 Copier · Envoyer à 3 contacts</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;font-style:italic;">💡 Envoyez ce DM à 3 personnes de votre réseau dès aujourd'hui</div>
-    </div>
-  `;
-
+      <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px;">💬 DM de Vente</div>
+      <div class="copy-box"><div class="copy-box-text" id="dmVente">${(d.dm_vente||'').replace(/\\n/g,'\n')}</div><button class="btn-copy" onclick="copyAndPulse('dmVente',this)">📲 Copier · Envoyer à 3 contacts</button></div>
+    </div>`;
   showScreen('result');
   injectDynamicForce();
   injectSocialProof();
-  requestAnimationFrame(() => {
-    animateCash('cashDisplay', cashVal, 1400);
-    animateViability(viability);
-  });
+  requestAnimationFrame(()=>{animateCash('cashDisplay',cashVal,1400);animateViability(viability);});
 }
 
-// ─── UTILITAIRES ─────────────────────────────────────────────
-function copyAndPulse(id, btn) {
-  const text = document.getElementById(id)?.innerText || '';
-  navigator.clipboard.writeText(text).then(() => {
-    const original = btn.innerHTML;
-    btn.innerHTML = '✅ Copié !';
-    btn.classList.add('success');
-    setTimeout(() => { btn.innerHTML = original; btn.classList.remove('success'); }, 2000);
-  });
-}
+function copyAndPulse(id,btn){const text=document.getElementById(id)?.innerText||'';navigator.clipboard.writeText(text).then(()=>{const o=btn.innerHTML;btn.innerHTML='✅ Copié !';btn.classList.add('success');setTimeout(()=>{btn.innerHTML=o;btn.classList.remove('success');},2000);});}
+function animateCash(id,end,dur){const el=document.getElementById(id);if(!el)return;let s=null;const step=ts=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1);const e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*end).toLocaleString('fr-FR')+'€';if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);}
+function animateViability(t){const f=document.getElementById('viabilityFill'),v=document.getElementById('viabilityVal');if(!f||!v)return;let c=0;const s=()=>{c=Math.min(c+1,t);f.style.width=c+'%';v.textContent=c+'%';if(c<t)requestAnimationFrame(s);};requestAnimationFrame(s);}
 
-function animateCash(id, end, duration) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  let start = null;
-  const step = ts => {
-    if (!start) start = ts;
-    const progress = Math.min((ts - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(ease * end).toLocaleString('fr-FR') + '€';
-    if (progress < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
+function renderFallback(){document.getElementById('freeContent').innerHTML=`<div style="padding:20px;background:rgba(196,92,56,0.1);border-radius:12px;color:#c4643c;font-size:15px;">Une erreur s'est produite. Vérifiez le proxy <code>/api/analyze</code> et la variable <code>ANTHROPIC_API_KEY</code>.</div>`;document.getElementById('circlesViz').innerHTML='';showScreen('result');}
 
-function animateViability(target) {
-  const fill = document.getElementById('viabilityFill');
-  const val = document.getElementById('viabilityVal');
-  if (!fill || !val) return;
-  let current = 0;
-  const step = () => {
-    current = Math.min(current + 1, target);
-    fill.style.width = current + '%';
-    val.textContent = current + '%';
-    if (current < target) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-
-// ─── WAITLIST AGENT IA ───────────────────────────────────────
-function joinWaitlist() {
-  const email = document.getElementById('waitlistEmail')?.value?.trim();
-  if (!email || !email.includes('@')) {
-    document.getElementById('waitlistEmail').style.borderColor = 'rgba(196,92,56,0.6)';
-    setTimeout(() => document.getElementById('waitlistEmail').style.borderColor = 'rgba(107,140,107,0.35)', 1500);
-    return;
-  }
-  // Stocke localement (en prod : envoyer à Supabase ou un webhook)
-  const waitlist = JSON.parse(localStorage.getItem('ikigai_waitlist') || '[]');
-  if (!waitlist.includes(email)) {
-    waitlist.push(email);
-    localStorage.setItem('ikigai_waitlist', JSON.stringify(waitlist));
-  }
-  document.getElementById('waitlistEmail').style.display = 'none';
-  document.querySelector('[onclick="joinWaitlist()"]').style.display = 'none';
-  document.getElementById('waitlistConfirm').style.display = 'block';
-  // TODO en prod : fetch('/api/waitlist', { method:'POST', body: JSON.stringify({ email }) })
-}
-
-// ─── RENDER FALLBACK ─────────────────────────────────────────
-function renderFallback() {
-  document.getElementById('freeContent').innerHTML = `
-    <div style="padding:20px;background:rgba(196,92,56,0.1);border-radius:12px;color:#c4643c;font-size:15px;">
-      Une erreur s'est produite. Vérifiez que le proxy <code>/api/analyze</code> est bien déployé sur Vercel et que la variable <code>ANTHROPIC_API_KEY</code> est configurée.
-    </div>`;
-  document.getElementById('circlesViz').innerHTML = '';
-  showScreen('result');
-}
-
-// ─── POST-PURCHASE ───────────────────────────────────────────
-function simulatePostPurchase(tier = 'solo') {
-  if (!window._lastDiagnosis) { alert('Complète d\'abord le diagnostic.'); return; }
-  renderPostPurchase(window._lastDiagnosis, tier);
-}
-
-function renderPostPurchase(d, tier = 'solo') {
-  const isPack = tier === 'pack';
-  const plan = d.plan_14j || [
-    'Jour 1-3 : Identifie 5 personnes dans ton réseau avec ce problème. Objectif : 3 réponses.',
-    'Jour 4-7 : Envoie le script à 3 contacts. Critère : 1 appel de 20 min obtenu.',
-    'Jour 8-14 : Présente ton offre verbalement. Critère : 1 "oui en principe" ou retour marché clair.'
-  ];
-  const script = d.script_approche || 'Bonjour [Prénom], je travaille sur [problème]. Je serais curieux d\'avoir ton avis — 20 min cette semaine ?';
-  const kit = d.kit_legitimite || 'Vous avez déjà résolu ce problème. La légitimité ne vient pas d\'un diplôme, mais de résultats documentés.';
-  const formations = d.formations || [];
-
-  const formationsHTML = isPack && formations.length > 0 ? `
-    <div style="margin-bottom:32px;">
-      <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-        <span style="background:var(--gold, #c8a96e);color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">4</span>
-        🎓 Plan de montée en compétences
-      </div>
-      <div style="background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:4px;">
-        ${formations.map(f => `
-          <div style="padding:18px 20px;border-bottom:1px solid rgba(200,169,110,0.1);">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-              <span style="background:rgba(200,169,110,0.15);color:#c8a96e;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">${f.type}</span>
-              <span style="font-size:14px;font-weight:600;color:#0f0e0c;">${f.titre}</span>
-            </div>
-            <div style="font-size:12px;color:#8a8070;margin-bottom:6px;">📚 ${f.plateforme}</div>
-            <div style="font-size:13px;color:#0f0e0c;line-height:1.6;margin-bottom:10px;font-style:italic;">"${f.pourquoi}"</div>
-            <a href="https://www.udemy.com/courses/search/?q=${encodeURIComponent(f.lien_recherche)}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#0f0e0c;color:#f5f0e8;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;">
-              🔍 Trouver cette formation →
-            </a>
-          </div>
-        `).join('')}
-      </div>
-      <div style="margin-top:12px;font-size:11px;color:#8a8070;text-align:center;">Les liens ci-dessus sont des recherches Udemy — certains peuvent être des liens d'affiliation.</div>
-    </div>
-  ` : isPack ? `
-    <div style="margin-bottom:32px;padding:20px;background:rgba(200,169,110,0.08);border-radius:12px;border:1px solid rgba(200,169,110,0.2);text-align:center;">
-      <div style="font-size:13px;color:#8a8070;">🎓 Les formations personnalisées sont générées avec votre diagnostic IA.</div>
-    </div>
-  ` : '';
-
-  document.getElementById('screen-postpurchase').innerHTML = `
-    <div style="background:linear-gradient(135deg,#0f0e0c,#1e1a15);padding:36px 40px 28px;color:#f5f0e8;position:relative;overflow:hidden;">
-      <div style="position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:100px;opacity:0.06;color:#c8a96e;">✦</div>
-      <div style="display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);color:#e8c98e;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">
-        ✦ ${isPack ? 'Pack Lancement' : 'Rapport Solo'} Débloqué
-      </div>
+function simulatePostPurchase(tier='solo'){if(!window._lastDiagnosis){alert('Complète d\'abord le diagnostic.');return;}renderPostPurchase(window._lastDiagnosis,tier);}
+function renderPostPurchase(d,tier='solo'){
+  const isPack=tier==='pack';
+  const plan=d.plan_14j||['Jour 1-3 : Identifie 5 personnes dans ton réseau.','Jour 4-7 : Envoie le script à 3 contacts.','Jour 8-14 : Présente ton offre verbalement.'];
+  const script=d.script_approche||'Bonjour [Prénom], je travaille sur [problème]. Je serais curieux d\'avoir ton avis — 20 min cette semaine ?';
+  const kit=d.kit_legitimite||'Vous avez déjà résolu ce problème. La légitimité vient de résultats, pas d\'un diplôme.';
+  const formations=d.formations||[];
+  const formationsHTML=isPack&&formations.length>0?`<div style="margin-bottom:32px;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">4</span>🎓 Plan de montée en compétences</div><div style="background:rgba(200,169,110,0.06);border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:4px;">${formations.map(f=>`<div style="padding:18px 20px;border-bottom:1px solid rgba(200,169,110,0.1);"><div style="font-size:14px;font-weight:600;margin-bottom:6px;">${f.titre} <span style="font-size:11px;color:#c8a96e;">${f.type}</span></div><div style="font-size:12px;color:#8a8070;margin-bottom:6px;">📚 ${f.plateforme}</div><div style="font-size:13px;line-height:1.6;font-style:italic;margin-bottom:10px;">"${f.pourquoi}"</div><a href="https://www.udemy.com/courses/search/?q=${encodeURIComponent(f.lien_recherche)}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#0f0e0c;color:#f5f0e8;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;">🔍 Trouver cette formation →</a></div>`).join('')}</div></div>`:''
+  document.getElementById('screen-postpurchase').innerHTML=`
+    <div style="background:linear-gradient(135deg,#0f0e0c,#1e1a15);padding:36px 40px 28px;color:#f5f0e8;">
+      <div style="display:inline-block;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.4);color:#e8c98e;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">✦ ${isPack?'Pack Lancement':'Rapport Solo'} Débloqué</div>
       <h2 style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px;">Votre trajectoire, étape par étape.</h2>
       <p style="font-size:14px;color:rgba(245,240,232,0.55);">Basé exclusivement sur vos réponses — rien de générique.</p>
     </div>
     <div style="padding:36px 40px;">
       <div style="background:rgba(200,169,110,0.08);border:1px solid rgba(200,169,110,0.2);border-radius:14px;padding:20px 24px;margin-bottom:32px;text-align:center;">
         <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:8px;">Votre Ikigai</div>
-        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;">"${d.ikigai_core || ''}"</div>
+        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;">"${d.ikigai_core||''}"</div>
       </div>
-      <div style="margin-bottom:32px;">
-        <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-          <span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</span>
-          Plan 14 jours
-        </div>
-        ${plan.map((step, i) => `
-          <div style="background:#f5f0e8;border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;margin-bottom:12px;">
-            <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:6px;">Étape ${i+1}</div>
-            <div style="font-size:14px;line-height:1.6;">${step}</div>
-          </div>`).join('')}
-      </div>
-      <div style="margin-bottom:32px;">
-        <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-          <span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">2</span>
-          Script d'approche
-        </div>
-        <div style="background:#0f0e0c;border-radius:12px;padding:20px 24px;color:#f5f0e8;font-size:14px;line-height:1.8;font-style:italic;border-left:3px solid #c8a96e;">"${script}"</div>
-        <div style="margin-top:10px;font-size:12px;color:#8a8070;">→ Adaptez les [crochets] à votre contexte.</div>
-      </div>
-      <div style="margin-bottom:32px;">
-        <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-          <span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">3</span>
-          Kit de légitimité
-        </div>
-        <div style="background:rgba(107,140,107,0.08);border:1px solid rgba(107,140,107,0.2);border-radius:12px;padding:18px 20px;font-size:14px;line-height:1.7;">${kit}</div>
-      </div>
+      <div style="margin-bottom:32px;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</span>Plan 14 jours</div>${plan.map((step,i)=>`<div style="background:#f5f0e8;border:1px solid rgba(200,169,110,0.2);border-radius:12px;padding:16px 18px;margin-bottom:12px;"><div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#c8a96e;font-weight:500;margin-bottom:6px;">Étape ${i+1}</div><div style="font-size:14px;line-height:1.6;">${step}</div></div>`).join('')}</div>
+      <div style="margin-bottom:32px;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">2</span>Script d'approche</div><div style="background:#0f0e0c;border-radius:12px;padding:20px 24px;color:#f5f0e8;font-size:14px;line-height:1.8;font-style:italic;border-left:3px solid #c8a96e;">"${script}"</div></div>
+      <div style="margin-bottom:32px;"><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><span style="background:#c8a96e;color:#0f0e0c;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">3</span>Kit de légitimité</div><div style="background:rgba(107,140,107,0.08);border:1px solid rgba(107,140,107,0.2);border-radius:12px;padding:18px 20px;font-size:14px;line-height:1.7;">${kit}</div></div>
       ${formationsHTML}
     </div>
-    <div style="padding:0 40px 32px;text-align:center;">
-      <button onclick="restart()" style="width:100%;padding:14px;background:transparent;border:1px solid rgba(200,169,110,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:#8a8070;cursor:pointer;">↺ Nouveau diagnostic</button>
-    </div>
-  `;
+    <div style="padding:0 40px 32px;text-align:center;"><button onclick="restart()" style="width:100%;padding:14px;background:transparent;border:1px solid rgba(200,169,110,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:#8a8070;cursor:pointer;">↺ Nouveau diagnostic</button></div>`;
   showScreen('postpurchase');
 }
 
-// ─── INIT ────────────────────────────────────────────────────
 updateProgress();
-
-// Nav scroll effect
-window.addEventListener('scroll', () => {
-  const nav = document.querySelector('.nav-float');
-  if (nav) {
-    if (window.scrollY > 20) {
-      nav.style.boxShadow = '0 8px 40px rgba(15,14,12,0.15), 0 1px 0 rgba(200,169,110,0.25)';
-    } else {
-      nav.style.boxShadow = '0 4px 32px rgba(15,14,12,0.10), 0 1px 0 rgba(200,169,110,0.2)';
-    }
-  }
-});
-
-// Hero counter animation
-(function() {
-  const base = 127 + Math.floor((Date.now() / 1000 / 3600) % 40);
-  const el = document.getElementById('heroCount');
-  if (!el) return;
-  let current = 0;
-  const step = () => {
-    current = Math.min(current + Math.ceil(base / 40), base);
-    el.textContent = current + '+';
-    if (current < base) requestAnimationFrame(step);
-  };
-  setTimeout(() => requestAnimationFrame(step), 600);
-})();
+window.addEventListener('scroll',()=>{const nav=document.querySelector('.nav-float');if(nav)nav.style.boxShadow=window.scrollY>20?'0 8px 40px rgba(15,14,12,0.15)':'0 4px 32px rgba(15,14,12,0.10)';});
+(function(){const base=127+Math.floor((Date.now()/1000/3600)%40);const el=document.getElementById('heroCount');if(!el)return;let c=0;const s=()=>{c=Math.min(c+Math.ceil(base/40),base);el.textContent=c+'+';if(c<base)requestAnimationFrame(s);};setTimeout(()=>requestAnimationFrame(s),600);})();
 </script>
 </body>
 </html>
