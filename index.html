@@ -28,16 +28,7 @@
   @keyframes navPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.4)}}
 
   /* HERO PLEIN ÉCRAN */
-  .hero-wrap{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;margin-top:-76px;}
-  .hero-img{position:absolute;inset:-8%;width:116%;height:116%;background-image:url('/Gemini_Generated_Image_odem3godem3godem.png');background-size:cover;background-position:center 40%;z-index:0;animation:kenBurns 28s ease-in-out infinite alternate;will-change:transform;filter:saturate(1.1) brightness(1.03);}
-  @keyframes kenBurns{
-    0%{transform:scale(1.0) translateX(0px) translateY(0px);}
-    33%{transform:scale(1.06) translateX(-18px) translateY(-10px);}
-    66%{transform:scale(1.10) translateX(12px) translateY(-18px);}
-    100%{transform:scale(1.14) translateX(-8px) translateY(-25px);}
-  }
-  .hero-video-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(245,240,232,0.15) 0%,rgba(245,240,232,0.05) 40%,rgba(245,240,232,0.55) 80%,rgba(245,240,232,1.0) 100%);}
-  .hero-text-block{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;width:100%;max-width:860px;padding:0 40px;}
+  .hero-section{padding:80px 48px 60px;max-width:900px;margin:0 auto;text-align:center;animation:fadeUp 0.8s ease both;}
   .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(200,169,110,0.2);border:1px solid rgba(200,169,110,0.45);backdrop-filter:blur(12px);padding:7px 18px;border-radius:100px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;font-weight:500;}
   .hero-h1{font-family:'Fraunces',serif;font-size:clamp(44px,7vw,86px);font-weight:700;line-height:1.0;letter-spacing:-3px;color:var(--ink);margin-bottom:20px;text-shadow:0 2px 40px rgba(245,240,232,0.8);}
   .hero-h1 em{font-style:italic;color:var(--gold);}
@@ -145,13 +136,7 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   @media(max-width:640px){
     .nav-outer{padding:12px 16px 0;}
-    .hero-wrap{height:90vh;}
-    .hero-text-block{padding:0 24px;}
-    .hero-h1{letter-spacing:-2px;}
-    .hero-stats-bar{bottom:24px;padding:10px 20px;}
-    .hero-stat{padding:0 14px;}
-    .hero-stat-num{font-size:18px;}
-    .hero-scroll{bottom:90px;}
+
     .q-header,.q-body,.btn-row{padding-left:24px;padding-right:24px;}
     .tip-box{margin-left:24px;margin-right:24px;}
     .result-body,.result-header{padding:24px;}
@@ -170,31 +155,20 @@
   </nav>
 </div>
 
-<div class="hero-wrap">
-  <div class="hero-img"></div>
-  <div class="hero-video-overlay"></div>
-  <div class="hero-text-block">
-    <div class="hero-pill">⬡ Diagnostic de Carrière par IA</div>
-    <h1 class="hero-h1">Votre reconversion,<br><em>cartographiée</em> avec précision.</h1>
-    <p class="hero-sub">6 questions. 4 minutes. Un plan d'action concret<br>et personnalisé pour votre prochain chapitre.</p>
-    <button class="hero-cta-pill" onclick="document.getElementById('mainCard').scrollIntoView({behavior:'smooth'})">
-      <div class="cta-arrow">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="#0f0e0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      Démarrer mon diagnostic
-    </button>
-  </div>
-  <div class="hero-scroll">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3L8 13M8 13L4 9M8 13L12 9" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Défiler
-  </div>
-  <div class="hero-stats-bar">
-    <div class="hero-stat"><div class="hero-stat-num">4 min</div><div class="hero-stat-label">Pour compléter</div></div>
-    <div class="hero-stat-sep"></div>
-    <div class="hero-stat"><div class="hero-stat-num" id="heroCount">127+</div><div class="hero-stat-label">Reconversions activées</div></div>
-    <div class="hero-stat-sep"></div>
-    <div class="hero-stat"><div class="hero-stat-num">19€</div><div class="hero-stat-label">Plan complet</div></div>
-  </div>
+<div class="hero-section">
+  <div class="hero-pill">⬡ Diagnostic de Carrière par IA</div>
+  <h1 style="font-family:'Fraunces',serif;font-size:clamp(38px,6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;">
+    Votre reconversion,<br><em style="font-style:italic;color:var(--gold);">cartographiée</em> avec précision.
+  </h1>
+  <p style="font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 32px;line-height:1.7;font-weight:300;">
+    6 questions. 4 minutes. Un plan d'action concret et personnalisé pour votre prochain chapitre.
+  </p>
+  <button class="hero-cta-pill" onclick="document.getElementById('mainCard').scrollIntoView({behavior:'smooth'})">
+    <div class="cta-arrow">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2V9" stroke="#0f0e0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Démarrer mon diagnostic
+  </button>
 </div>
 
 <div class="progress-wrap">
