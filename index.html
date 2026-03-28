@@ -750,11 +750,13 @@ Produis le diagnostic JSON complet.`;
     
     window._lastDiagnosis = parsed;
     renderResult(parsed);
-
 } catch (err) {
-    console.error('Détails erreur:', err);
-    renderFallback();
-}
+        console.error('Détails erreur:', err);
+        renderFallback();
+    }
+} // <--- C'est souvent cette accolade qui manque pour fermer la fonction "analyze" !
+
+  
 // ─── POST-ACHAT : Dashboard personnalisé ─────────────────────
 // Appelé après confirmation Stripe (webhook → redirect URL avec ?paid=1)
 // ou simulé ici pour la démo avec le bouton unlock
