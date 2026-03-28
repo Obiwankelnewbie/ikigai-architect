@@ -720,33 +720,41 @@ ${answers.q6}
 Produis le diagnostic JSON complet.`;
 
   try {
-    // 🔒 Appel sécurisé via proxy Vercel — la clé ANTHROPIC_API_KEY
-    // est stockée dans les variables d'environnement Vercel, jamais ici.
-    // Le frontend n'a aucune clé exposée.
-    const res = await fetch('/api', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-      model: 'claude-3-5-sonnet-20240620', 
-        max_tokens: 1500,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }]
-      })
+    // ⚡️ MODE DIRECT (On contourne le proxy Vercel qui bugue)
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': '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', // <--- COLLE TA CLÉ ENTIÈRE ICI
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true' 
+        },
+        body: JSON.stringify({
+            model: 'claude-3-5-sonnet-latest',
+            max_tokens: 1500,
+            system: systemPrompt,
+            messages: [{ role: 'user', content: userPrompt }]
+        })
     });
 
-    if (!res.ok) throw new Error(`Erreur serveur : ${res.status}`);
+    if (!res.ok) {
+        const errorDetail = await res.json();
+        console.error('Erreur Anthropic Direct:', errorDetail);
+        throw new Error('Erreur API');
+    }
+
     const data = await res.json();
     const raw = data.content.map(b => b.text || '').join('');
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
+    
     window._lastDiagnosis = parsed;
     renderResult(parsed);
-  } catch (err) {
+
+} catch (err) {
     console.error('Détails erreur:', err);
     renderFallback();
-  }
 }
-
 // ─── POST-ACHAT : Dashboard personnalisé ─────────────────────
 // Appelé après confirmation Stripe (webhook → redirect URL avec ?paid=1)
 // ou simulé ici pour la démo avec le bouton unlock
